@@ -112,9 +112,24 @@ textarea.form-control {
 }
 
 .logo-besar {
-  width: 200px;
-  height: 200px;
-  max-width: 100%;
+  width: 200px; /* ukuran desktop */
+  height: auto;
+}
+
+/* Tablet: maksimal 768px */
+@media (max-width: 768px) {
+  .logo-besar {
+    width: 150px !important; /* pakai !important agar override jika ada style lain */
+    height: auto !important;
+  }
+}
+
+/* HP: maksimal 576px */
+@media (max-width: 576px) {
+  .logo-besar {
+    width: 120px !important; /* logo mengecil di HP */
+    height: auto !important;
+  }
 }
 
 .bg-custom {
@@ -167,17 +182,8 @@ textarea.form-control {
 main {
   height: 100%;
 }
-@media (min-width: 576px) {
-  .logo-besar {
-    width: 200px;
-  }
-}
 
 @media (min-width: 768px) {
-  .logo-besar {
-    width: 200px;
-  }
-
   .kepaldes {
     width: 28rem;
     height: auto; /* Ukuran untuk layar sedang (>= 768px, seperti tablet) */
@@ -220,5 +226,45 @@ main {
 @layer utilities {
   .clip-irregular {
     transform: translateY(-100px); /* naik 10px */
+  }
+}
+@media (max-width: 576px) {
+  .profile-rutan p,
+  .serba-serbi-rutan p {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    text-align: justify !important;
+  }
+
+  .profile-rutan h1,
+  .serba-serbi-rutan h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.4 !important;
+  }
+}
+/* Default desktop */
+.text-content {
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1.7;
+  text-align: justify;
+}
+/* Default desktop */
+.text-kontak {
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .text-content {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+  }
+  .text-kontak {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
   }
 }
