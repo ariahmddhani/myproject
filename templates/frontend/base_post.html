@@ -110,81 +110,96 @@
     {% block konten %}{% endblock konten %}
 
     <!-- Footer Section -->
-    <footer class="footer p-5 text-dark">
-      <div class="container-fluid">
-        <div class="row">
+      <footer class="footer bg-light text-dark py-5">
+      <div class="container">
+        <div class="row align-items-start">
           <!-- Kolom Logo dan Deskripsi -->
           <div class="col-md-4 mb-4">
             <img
-              src="{% static 'frontend/gambar/kolab.png'%}"
-              class="h-16 w-25 mb-3"
+              src="{% static 'frontend/gambar/gaharu.png'%}"
+              class="mb-3"
               alt="Logo kukar"
+              style="height: 60px"
             />
-            <p>
-              Rutan Tanjung Redeb
-              <br />
-              Jl. DR. Murjani II, Gayam, Kec. Tj. Redeb, Kabupaten Berau,
-              Kalimantan Timur 77315
-              <br />
-            </p>
+            <p class="mb-0 fw-semibold">Rutan Tanjung Redeb</p>
+            <small class="text-muted">
+              Kalimantan Timur, Kabupaten Berau
+            </small>
           </div>
 
           <!-- Kolom Kontak -->
-          <div class="col-md-5 mb-4">
-            <h6 class="fw-bold">Hubungi Kami</h6>
-            <p>
-              Kalimantan Timur, Kab. Kutai Kartanegara, Kec. Tenggarong
-              Seberang, 75572
+          <div class="col-md-4 mb-4">
+            <h6 class="fw-bold mb-3">Hubungi Kami</h6>
+            <p class="mb-2">
+              Jl. DR. Murjani II, Gayam, Kec. Tj. Redeb, Kabupaten Berau,
+              Kalimantan Timur 77315
             </p>
-            <a
-              href="tel:0822-5546-2424"
-              class="d-block text-decoration-none text-dark"
-              >Telepon : 0822-5546-2424</a
-            >
-            <a
-              href="mailto:desakertabuana24@gmail.com"
-              class="d-block text-decoration-none text-dark"
-              >Email : desakertabuana24@gmail.com</a
-            >
+            <p class="mb-1">
+              <a
+                href="tel:0822-5546-2424"
+                class="text-decoration-none text-dark"
+              >
+                📞 Telepon : 08xxxxxxxxxxxxx
+              </a>
+            </p>
+            <p class="mb-0">
+              <a
+                href="mailto:rutanxxxxxxxx@gmail.com"
+                class="text-decoration-none text-dark"
+              >
+                ✉️ Email : rutanxxxxxxxx@gmail.com
+              </a>
+            </p>
+          </div>
 
-            <!-- Ikon Media Sosial -->
-            <div class="d-flex gap-3 mt-3">
-              <a href="https://www.facebook.com/kerta.buana.94">
+          <!-- Kolom Sosial Media -->
+          <div class="col-md-4 mb-4 text-md-end text-center">
+            <h6 class="fw-bold mb-3">Ikuti Kami</h6>
+            <div
+              class="d-flex justify-content-md-end justify-content-center gap-3"
+            >
+              <a href="https://www.facebook.com/RutanBerau/?locale=id_ID">
                 <img
                   src="{% static 'frontend/gambar/fb.svg'%}"
-                  class="img-fluid"
                   alt="Facebook"
-                  style="width: 40px"
+                  style="width: 36px"
                 />
               </a>
-              <a href="https://www.instagram.com/kertabuana">
+              <a
+                href="https://www.instagram.com/rutantanjungredeb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              >
                 <img
                   src="{% static 'frontend/gambar/ig.png'%}"
-                  class="img-fluid"
                   alt="Instagram"
-                  style="width: 40px"
+                  style="width: 36px"
                 />
               </a>
               <a href="https://youtu.be/nOFqH1dfZCw?si=rnIMyB0wNoUaqubs">
                 <img
                   src="{% static 'frontend/gambar/yt.svg'%}"
-                  class="img-fluid"
                   alt="YouTube"
-                  style="width: 40px"
+                  style="width: 36px"
                 />
               </a>
             </div>
           </div>
+        </div>
 
-          <!-- Kolom Layanan -->
-          <div class="col-md-3 mb-4">
-            <h6 class="fw-bold">Layanan Terkait</h6>
-            <a href="#home" class="d-block text-decoration-none text-dark"
-              >Pembuatan Surat</a
+        <!-- Copyright -->
+        <div class="text-center mt-4 pt-3 border-top">
+          <div class="copyright">
+            &copy; Copyright
+            <strong><span>RUTAN KELAS IIB TANJUNG REDEB</span></strong
+            >. All Rights Reserved
+          </div>
+          <div class="credits small text-muted">
+            Designed by
+            <a
+              href="https://www.instagram.com/ariiahmad_/"
+              class="text-decoration-none fw-semibold"
             >
-            <a href="#kontak" class="d-block text-decoration-none text-dark"
-              >Area Pengaduan</a
-            >
+              ARI AHMAD DHANI
+            </a>
           </div>
         </div>
       </div>
