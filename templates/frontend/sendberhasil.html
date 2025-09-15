@@ -1,0 +1,26 @@
+{% extends "frontend/base_post.html" %} {% load static %} {% block konten %}
+
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card text-center">
+          <!-- Menambahkan elemen gambar di bagian atas -->
+          <img src="{% static 'frontend/gambar/pns 2.png' %}" alt="Pengaduan Berhasil Dikirim" class="img-fluid">
+          
+          <div class="card-body">
+            <div class="success-icon my-3">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h5 class="card-title fw-bold">Pengaduan Berhasil Dikirim!</h5>
+            <p class="card-text">Terima kasih atas pengaduan Anda. Kami akan segera menindaklanjuti pengaduan Anda secepat mungkin.</p>
+            <a href="{% url 'welcome' %}" class="btn btn-primary">Silakan Kembali</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</html>
+
+{% endblock konten %}

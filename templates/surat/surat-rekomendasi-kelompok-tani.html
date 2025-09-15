@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surat Izin Besukan</title>
+    <style>
+      body {
+        font-family: "Times New Roman", Times, serif;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+
+      .card {
+        width: 21cm; /* ukuran A4 */
+        min-height: 29.7cm;
+        margin: auto;
+        padding: 2cm;
+        box-sizing: border-box;
+        border: 1px solid #000;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .header img {
+        width: 80px;
+        height: auto;
+        margin-bottom: 10px;
+      }
+
+      .header h1 {
+        font-size: 14pt;
+        margin: 2px 0;
+        font-weight: bold;
+      }
+
+      .content h2 {
+        text-align: center;
+        text-decoration: underline;
+        margin: 20px 0;
+        font-size: 13pt;
+      }
+
+      .details table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 12pt;
+      }
+
+      .details td {
+        padding: 4px 6px;
+        vertical-align: top;
+      }
+
+      .signature {
+        margin-top: 40px;
+        font-size: 12pt;
+      }
+
+      .signature table {
+        width: 100%;
+      }
+
+      .signature p {
+        margin: 2px 0;
+      }
+
+      /* Untuk cetak */
+      @media print {
+        body,
+        .card {
+          margin: 0;
+          padding: 0;
+          border: none;
+          width: 100%;
+          min-height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="header">
+        <img
+          src="{% static 'backend/img/logokukar.png' %}"
+          alt="Logo Kemenkumham"
+        />
+        <h1>KEMENTERIAN IMIGRASI DAN PEMASYARAKATAN</h1>
+        <h1>RUTAN KELAS II B TANJUNG REDEB</h1>
+      </div>
+
+      <div class="content">
+        <h2>SURAT IZIN BESUKAN</h2>
+
+        <div class="details">
+          <table>
+            <tr>
+              <td style="width: 35%">Nama Pengunjung</td>
+              <td style="width: 5%">:</td>
+              <td>{{ suket.nama}}</td>
+            </tr>
+            <tr>
+              <td>Hubungan</td>
+              <td>:</td>
+              <td>{{ suket.hubungan }}</td>
+            </tr>
+            <tr>
+              <td>Nama WBP</td>
+              <td>:</td>
+              <td>{{ suket.namawbp }}</td>
+            </tr>
+            <tr>
+              <td>Tanggal</td>
+              <td>:</td>
+              <td>{{ suket.tanggal_kunjungan|date:"d-m-Y" }}</td>
+            </tr>
+            <tr>
+              <td>Jam</td>
+              <td>:</td>
+              <td>{{ suket.jam_kunjungan|time:"H:i" }}</td>
+            </tr>
+            <tr>
+              <td>Jenis Kunjungan</td>
+              <td>:</td>
+              <td>{{ suket.jenis_kunjungan }}</td>
+            </tr>
+            <tr>
+              <td colspan="3"><strong>Jumlah Pengikut</strong></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Laki-laki : {{ suket.pengikut_laki }} Orang</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Perempuan : {{ suket.pengikut_perempuan }} Orang</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Anak-anak : {{ suket.pengikut_anak }} Orang</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td><strong>Total : {{ total_pengikut }} Orang</strong></td>
+            </tr>
+          </table>
+
+          <br />
+          <h4>Barang Bawaan</h4>
+          <table border="1" cellspacing="0" cellpadding="5" width="100%">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Barang</th>
+                <th>Jumlah</th>
+                <th>Satuan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for barang in suket.barang_bawaan %}
+              <tr>
+                <td style="text-align: center">{{ forloop.counter }}</td>
+                <td>{{ barang.nama }}</td>
+                <td style="text-align: center">{{ barang.jumlah }}</td>
+                <td style="text-align: center">{{ barang.satuan }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" style="text-align: center">
+                  Tidak ada barang bawaan
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% if suket.barang_bawaan %}
+          <p>
+            <strong>Total Barang :</strong> {{ suket.barang_bawaan|length }}
+            Jenis
+          </p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="signature">
+        <table>
+          <tr>
+            <td style="text-align: left; width: 50%">
+              <p>Pembesuk</p>
+              <br /><br /><br /><br />
+              <p>(.....................................)</p>
+            </td>
+            <td style="text-align: right; width: 50%">
+              <p>Berau, {{ suket.tanggal_kunjungan|date:"d-m-Y" }}</p>
+              <p>Petugas</p>
+              <br /><br /><br /><br />
+              <p>(.....................................)</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

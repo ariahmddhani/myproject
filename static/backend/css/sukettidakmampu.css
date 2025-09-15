@@ -1,0 +1,92 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 2px;
+    border-bottom: 5px solid black;
+  }
+  .header::after {
+    content: "";
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid black;
+    margin-top: -3px;
+  }
+  .header img {
+    width: 65px;
+    height: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .header p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  .header .address {
+    margin-top: 0px;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .content {
+    margin-top: 30px;
+  }
+  .content h2 {
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 0px;
+    font-size: 18px;
+  }
+  .content p {
+    font-size: 16px;
+    margin-top: -5px;
+    margin-bottom: 10px 0;
+    line-height: 1.6;
+  }
+  .details {
+    margin-left: 30px;
+    margin-top: 20px;
+  }
+  .details p {
+    margin: 10px 0;
+    line-height: 1.8;
+  }
+  .details table {
+    width: 100%;
+    line-height: 1.8;
+  }
+  .details td {
+    vertical-align: top;
+  }
+  .details td:first-child {
+    width: 3%;
+  }
+  .details td:nth-child(2) {
+    width: 35%;
+  }
+  .details td:nth-child(3) {
+    width: 2%;
+  }
+  .signature {
+    margin-top: 60px;
+    text-align: right;
+    margin-right: 50px;
+  }
+  .signature p {
+    margin: 5px 15px;
+  }
+  .signature > p:first-child {
+    margin: 5px 2px;
+    
+  }

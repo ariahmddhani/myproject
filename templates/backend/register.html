@@ -1,0 +1,141 @@
+{% extends "frontend/base_post.html" %} {% load static %} {% load custom_filters
+%} {% block konten %}
+
+<!-- Main Register Section -->
+<main class="container-fluid my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <!-- Logo Section -->
+          <div class="text-center mb-4">
+            <img
+              class="logo-kecil mb-3"
+              src="{% static 'frontend/gambar/Logo_imipas.png' %}"
+              alt="logo-kukar"
+              style="width: 100px"
+            />
+            <h3 class="fw-bold text-primary">Daftar Akun Baru</h3>
+            <p class="text-muted">Isi form di bawah untuk membuat akun</p>
+          </div>
+
+          <!-- Registration Form -->
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Username Field -->
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                class="form-control form-control-lg rounded-3"
+                id="username"
+                name="username"
+                required
+              />
+            </div>
+
+            <!-- First Name Field -->
+            <div class="mb-3">
+              <label for="first_name" class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control form-control-lg rounded-3"
+                id="first_name"
+                name="first_name"
+                required
+              />
+            </div>
+
+            <!-- Last Name Field -->
+            <div class="mb-3">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control form-control-lg rounded-3"
+                id="last_name"
+                name="last_name"
+                required
+              />
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control form-control-lg rounded-3"
+                id="email"
+                name="email"
+                required
+              />
+            </div>
+
+            <!-- Password Fields -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control form-control-lg rounded-3"
+                id="password"
+                name="password"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password2" class="form-label">Confirm Password</label>
+              <input
+                type="password"
+                class="form-control form-control-lg rounded-3"
+                id="password2"
+                name="password2"
+                required
+              />
+            </div>
+
+            <!-- NIK Field -->
+            <div class="mb-3">
+              <label for="nik" class="form-label">NIK</label>
+              <input
+                type="text"
+                class="form-control form-control-lg rounded-3"
+                id="nik"
+                name="nik"
+                required
+              />
+            </div>
+
+            <!-- Upload KTP -->
+            <div class="mb-3">
+              <label for="ktp" class="form-label">Upload KTP</label>
+              <input
+                type="file"
+                class="form-control form-control-lg rounded-3"
+                id="ktp"
+                name="ktp"
+                required
+              />
+            </div>
+
+            <!-- Register Button -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary btn-lg rounded-3">
+                Register
+              </button>
+            </div>
+
+            <!-- Already Have an Account -->
+            <div class="text-center">
+              <p>
+                Sudah punya akun?
+                <a href="{% url 'loginpage' %}">Login disini</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div class="pagetitle">
+  <h1>Detail Data Pengaduan Asing</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'pengaduan_asing' %}">Aduan</a>
+      </li>
+      <li class="breadcrumb-item active">Detail Aduan Asing</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="section profile">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body pt-3">
+          <!-- Detail -->
+          <h5 class="card-title">Detail Data Aduan</h5>
+
+          <div class="row">
+            <div class="col-lg-1 col-md-3 label">Name</div>
+            <div class="col-lg-10 col-md-9">{{ aduans.name }}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-1 col-md-3 label">Email</div>
+            <div class="col-lg-10 col-md-9">{{ aduans.email }}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-1 col-md-3 label">Telepon</div>
+            <div class="col-lg-10 col-md-9">{{ aduans.phone }}</div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-1 col-md-3 label">Message</div>
+            <div class="col-lg-10 col-md-9">
+              <div class="message-box">{{ aduans.message }}</div>
+            </div>
+          </div>
+          <hr />
+
+          <!-- Riwayat Balasan -->
+          {% if riwayat_jawaban %}
+          <h5 class="card-title">Riwayat Balasan</h5>
+          <ul class="list-group mb-4">
+            {% for jawab in riwayat_jawaban %}
+            <li class="list-group-item">
+              <div><strong>{{ jawab.tanggal|date:"d M Y H:i" }}</strong></div>
+              {% if jawab.dijawab_oleh %}
+              <div>{{ jawab.dijawab_oleh }}</div>
+              {% endif %}
+              <div>{{ jawab.jawaban }}</div>
+            </li>
+            {% endfor %}
+          </ul>
+
+          {% endif %}
+
+          <!-- Form Balasan -->
+          <h5 class="card-title">Kirim Jawaban Baru</h5>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="jawaban" class="form-label">Jawaban</label>
+              <textarea
+                name="jawaban"
+                id="jawaban"
+                rows="5"
+                class="form-control"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Kirim ke Email
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock konten %}

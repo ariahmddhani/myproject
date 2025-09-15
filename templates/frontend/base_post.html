@@ -1,0 +1,206 @@
+{% load static %} {% load custom_filters %} {% load livereload_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'frontend/css/bootstrap.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'frontend/css/styles.css' %}" />
+    <link href="{% static 'frontend/gambar/Logo_gaharu.png' %}" rel="icon" />
+    {% livereload_script %}
+    <title>{{ post.title }}</title>
+  </head>
+
+  <body>
+    <!-- Navbar Section -->
+    <header class="jumbotronblog body-content" id="home">
+      <nav class="navbar navbar-expand-lg container-fluid" id="navbar">
+        <div class="container-fluid">
+          <div>
+            <a href="{% url 'welcome' %}" class="text-decoration-none">
+              <img
+                class="logo-kecil"
+                src="{% static 'frontend/gambar/Logo_imipas.png' %}"
+                alt="logo-kukar"
+              />
+              <span class="text-light fw-bold ms-3 fs-4"> SIPANDAI</span>
+            </a>
+          </div>
+          <button
+            class="navbar-toggler bg-light"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse bg-custom rounded mt-3 mt-md-3"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav ms-lg-auto ms-3 ms-md-3">
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'welcome' %}"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'welcome' %}"
+                  >Pengumuman</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'welcome' %}"
+                  >Berita Desa</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'welcome' %}"
+                  >Profile</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'welcome' %}"
+                  >Kontak</a
+                >
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'loginpage' %}"
+                  >{{request.user.username}}</a
+                >
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'loginpage' %}"
+                  >Login</a
+                >
+              </li>
+
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Blog Content -->
+    {% block konten %}{% endblock konten %}
+
+    <!-- Footer Section -->
+    <footer class="footer p-5 text-dark">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Kolom Logo dan Deskripsi -->
+          <div class="col-md-4 mb-4">
+            <img
+              src="{% static 'frontend/gambar/kolab.png'%}"
+              class="h-16 w-25 mb-3"
+              alt="Logo kukar"
+            />
+            <p>
+              Rutan Tanjung Redeb
+              <br />
+              Jl. DR. Murjani II, Gayam, Kec. Tj. Redeb, Kabupaten Berau,
+              Kalimantan Timur 77315
+              <br />
+            </p>
+          </div>
+
+          <!-- Kolom Kontak -->
+          <div class="col-md-5 mb-4">
+            <h6 class="fw-bold">Hubungi Kami</h6>
+            <p>
+              Kalimantan Timur, Kab. Kutai Kartanegara, Kec. Tenggarong
+              Seberang, 75572
+            </p>
+            <a
+              href="tel:0822-5546-2424"
+              class="d-block text-decoration-none text-dark"
+              >Telepon : 0822-5546-2424</a
+            >
+            <a
+              href="mailto:desakertabuana24@gmail.com"
+              class="d-block text-decoration-none text-dark"
+              >Email : desakertabuana24@gmail.com</a
+            >
+
+            <!-- Ikon Media Sosial -->
+            <div class="d-flex gap-3 mt-3">
+              <a href="https://www.facebook.com/kerta.buana.94">
+                <img
+                  src="{% static 'frontend/gambar/fb.svg'%}"
+                  class="img-fluid"
+                  alt="Facebook"
+                  style="width: 40px"
+                />
+              </a>
+              <a href="https://www.instagram.com/kertabuana">
+                <img
+                  src="{% static 'frontend/gambar/ig.png'%}"
+                  class="img-fluid"
+                  alt="Instagram"
+                  style="width: 40px"
+                />
+              </a>
+              <a href="https://youtu.be/nOFqH1dfZCw?si=rnIMyB0wNoUaqubs">
+                <img
+                  src="{% static 'frontend/gambar/yt.svg'%}"
+                  class="img-fluid"
+                  alt="YouTube"
+                  style="width: 40px"
+                />
+              </a>
+            </div>
+          </div>
+
+          <!-- Kolom Layanan -->
+          <div class="col-md-3 mb-4">
+            <h6 class="fw-bold">Layanan Terkait</h6>
+            <a href="#home" class="d-block text-decoration-none text-dark"
+              >Pembuatan Surat</a
+            >
+            <a href="#kontak" class="d-block text-decoration-none text-dark"
+              >Area Pengaduan</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'frontend/js/bootstrap.min.js' %}"></script>
+    <script>
+      window.addEventListener("scroll", function () {
+        var navbar = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          // Scroll threshold, 50px misalnya
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+    </script>
+  </body>
+</html>

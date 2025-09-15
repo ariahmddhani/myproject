@@ -1,0 +1,514 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div class="pagetitle">
+  <h1>Dashboard</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="section dashboard">
+  <div class="row">
+    <!-- Left side columns -->
+    <div class="col-lg-8">
+      <div class="row">
+        <!-- User Card -->
+
+        <!-- End Bantuan Hukum Card -->
+
+        <!-- Recent Sales / FAQ -->
+        {% if user.is_superuser %}
+        <div class="col-xxl-3 col-md-6">
+          <div class="card info-card sales-card">
+            <div class="card-body">
+              <h5 class="card-title">User</h5>
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-person-circle"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ total_users }}</h6>
+                  <span class="text-muted small pt-2 ps-1">Total User</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End User Card -->
+
+        <!-- Pendaftar Besukan Card -->
+        <div class="col-xxl-3 col-md-6">
+          <div class="card info-card revenue-card">
+            <div class="card-body">
+              <h5 class="card-title">Besukan</h5>
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ total_suket_rek_kel_tani }}</h6>
+                  <span class="text-muted small pt-2 ps-1"
+                    >Total Pendaftar</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Pendaftar Besukan Card -->
+
+        <!-- Pengaduan Card -->
+        <div class="col-xxl-3 col-md-6">
+          <div class="card info-card customers-card">
+            <div class="card-body">
+              <h5 class="card-title">Pengaduan</h5>
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-megaphone"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ total_aduan }}</h6>
+                  <span class="text-muted small pt-2 ps-1">Total Aduan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Pengaduan Card -->
+
+        <!-- Ijin Luar Biasa Card -->
+        <div class="col-xxl-3 col-md-6">
+          <div class="card info-card ijin-card">
+            <div class="card-body">
+              <h5 class="card-title">Ijin Luar Biasa</h5>
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-journal-text"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ total_ilb }}</h6>
+                  <span class="text-muted small pt-2 ps-1">Total ILB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End ILB Card -->
+
+        <!-- Bantuan Hukum Card -->
+        <div class="col-xxl-3 col-md-6">
+          <div class="card info-card hukum-card">
+            <div class="card-body">
+              <h5 class="card-title">Bantuan Hukum</h5>
+              <div class="d-flex align-items-center">
+                <div
+                  class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                >
+                  <i class="bi bi-bank"></i>
+                </div>
+                <div class="ps-3">
+                  <h6>{{ total_bantuan_hukum }}</h6>
+                  <span class="text-muted small pt-2 ps-1">Total Bantuan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xxxl-3 col-md-9">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title small pt-1 ps-1"></h5>
+              <canvas id="barChart2" height="86"></canvas>
+            </div>
+          </div>
+        </div>
+        <!-- Tabel Pendaftar Terbaru -->
+        <div class="col-12">
+          <div class="card recent-sales overflow-auto">
+            <div class="card-body">
+              <h5 class="card-title">Pendaftar Terbaru</h5>
+              <table class="table table-borderless datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Penulis</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Tipe Surat</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for surat_info in recent_surat %}
+                  <tr>
+                    <td>
+                      <a href="{% get_surat_table_url surat_info.surat %}"
+                        >#{{ surat_info.surat.id }}</a
+                      >
+                    </td>
+                    <td>{{ surat_info.surat.penulis.username }}</td>
+                    <td>{{ surat_info.surat.date }}</td>
+                    <td>{{ surat_info.type }}</td>
+                    {% if surat_info.surat.status == 'review' %}
+                    <td class="text-warning fw-bold">Proses Review</td>
+                    {% elif surat_info.surat.status == 'approved' %}
+                    <td class="text-success fw-bold">Disetujui</td>
+                    {% elif surat_info.surat.status == 'rejected' %}
+                    <td class="text-danger fw-bold">Ditolak</td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <!-- FAQ untuk User Biasa -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Pertanyaan Yang Sering Ditanyakan</h5>
+              <div class="accordion accordion-flush" id="faq-group-1">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      data-bs-target="#faqsOne-1"
+                      type="button"
+                      data-bs-toggle="collapse"
+                    >
+                      Bagaimana cara print/unduh surat?
+                    </button>
+                  </h2>
+                  <div
+                    id="faqsOne-1"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#faq-group-1"
+                  >
+                    <div class="accordion-body">
+                      Print/unduh surat dapat dilakukan setelah disetujui oleh
+                      admin.
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      data-bs-target="#faqsOne-2"
+                      type="button"
+                      data-bs-toggle="collapse"
+                    >
+                      Bagaimana jika pendaftaran ditolak?
+                    </button>
+                  </h2>
+                  <div
+                    id="faqsOne-2"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#faq-group-1"
+                  >
+                    <div class="accordion-body">
+                      Silahkan lakukan edit/pengubahan isi pendaftaran sesuai
+                      dengan ketentuan lalu konfirmasi ulang ke admin agar
+                      disetujui.
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      data-bs-target="#faqsOne-3"
+                      type="button"
+                      data-bs-toggle="collapse"
+                    >
+                      Apa yang harus dilakukan ketika salah memasukkan informasi
+                      akun?
+                    </button>
+                  </h2>
+                  <div
+                    id="faqsOne-3"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#faq-group-1"
+                  >
+                    <div class="accordion-body">
+                      Silahkan hubungi admin untuk meminta pengubahan informasi
+                      akun.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <!-- End Left side columns -->
+
+    <!-- Right side columns -->
+    <div class="col-lg-4">
+      {% if user.is_superuser %}
+      <div class="card">
+        <div class="card-body">
+          <div class="card-body">
+            <h5 class="card-title small pt-2 ps-6 text-center">
+              Proses Besukan
+            </h5>
+            <canvas id="pieChart" height="120"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Berita -->
+      <div class="card">
+        <div class="card-body pb-0">
+          <h5 class="card-title">Kemandirian</h5>
+          <div class="news">
+            {% for berita in blg %}
+            <div class="post-item clearfix mb-4">
+              <img src="{{ berita.picture }}" alt="" />
+              <h4>
+                <a href="{% url 'detail_blog' berita.id %}"
+                  >{{ berita.judul }}</a
+                >
+              </h4>
+              <div
+                style="
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+              >
+                <p style="margin-left: 17px">{{ berita.konten|striptags }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Pengumuman -->
+      <div class="card">
+        <div class="card-body pb-0">
+          <h5 class="card-title">Pengumuman</h5>
+          <div class="news">
+            {% for annc in annc %}
+            <div class="post-item clearfix mb-4">
+              <img src="{{ annc.picture }}" alt="" />
+              <h4>
+                <a href="{% url 'detail_pengumuman' annc.id %}"
+                  >{{ annc.judul }}</a
+                >
+              </h4>
+              <div
+                style="
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+              >
+                <p style="margin-left: 17px">{{ annc.konten|striptags }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body pb-0">
+          <h5 class="card-title">Ketahanan Pangan</h5>
+          <div class="news">
+            {% for item in pangan %}
+            <div class="post-item clearfix mb-4">
+              <img src="{{ item.gambar }}" alt="" />
+              <h4>
+                <a href="{% url 'detail_ketahananpangan' item.id %}"
+                  >{{ item.judul }}</a
+                >
+              </h4>
+              <div
+                style="
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+              >
+                <p style="margin-left: 17px">{{ item.isi|striptags }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="card">
+        <div class="card-body pb-0">
+          <h5 class="card-title">Kemandirian</h5>
+          <div class="news">
+            {% for berita in blg %}
+            <div class="post-item clearfix mb-4">
+              <img src="{{ berita.picture }}" alt="" />
+              <h4>
+                <a href="{% url 'detail_blog' berita.id %}"
+                  >{{ berita.judul }}</a
+                >
+              </h4>
+              <div
+                style="
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+              >
+                <p style="margin-left: 17px">{{ berita.konten|striptags }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body pb-0">
+          <h5 class="card-title">Pengumuman</h5>
+          <div class="news">
+            {% for annc in annc %}
+            <div class="post-item clearfix">
+              <img src="{{ annc.picture }}" alt="" />
+              <h4>
+                <a href="{% url 'detail_pengumuman' annc.id %}"
+                  >{{ annc.judul }}</a
+                >
+              </h4>
+              <div
+                style="
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+              >
+                <p style="margin-left: 17px">{{ annc.konten|striptags }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body pb-0">
+          <h5 class="card-title">Ketahanan Pangan</h5>
+          <div class="news">
+            {% for item in pangan %}
+            <div class="post-item clearfix mb-4">
+              <img src="{{ item.gambar }}" alt="" />
+              <h4>
+                <a href="{% url 'detail_ketahananpangan' item.id %}"
+                  >{{ item.judul }}</a
+                >
+              </h4>
+              <div
+                style="
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                "
+              >
+                <p style="margin-left: 17px">{{ item.isi|striptags }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Pengumuman -->
+    </div>
+    <!-- End Right side columns -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    new Chart(document.querySelector('#pieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{
+          label: 'Jumlah Aduan',
+          data: {{ chart_values|safe }},
+          backgroundColor: [
+            'rgba(255, 205, 86, 0.8)', // kuning
+            'rgba(75, 192, 192, 0.8)', // hijau
+            'rgba(255, 99, 132, 0.8)'  // merah
+          ],
+          borderColor: [
+            'rgba(255, 205, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    new Chart(document.getElementById("barChart2"), {
+      type: "line",
+      data: {
+        labels: {{ chart_varian|safe }},   // ini akan berisi ["ari", "budi", "citra", ...]
+        datasets: [{
+          label: "",
+          data: {{ chart_variasi|safe }},   // [10, 8, 7, 5, 4]
+          backgroundColor: [
+            "#36b9cc",
+            "#f6c23e",
+            "#1cc88a",
+            "#e74a3b",
+            "#4e73df"
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</section>
+
+{% endblock konten %}

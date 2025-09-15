@@ -1,0 +1,1174 @@
+{% load static %} {% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{% static 'frontend/css/bootstrap.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'frontend/css/styles.css' %}" />
+    <link href="{% static 'frontend/gambar/logo_gaharu.png'%}" rel="icon" />
+    {% comment %} {% livereload_script %} {% endcomment %}
+    <title>GAHARU</title>
+  </head>
+
+  <body>
+    <header class="jumbtron body-content" id="home">
+      <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+        <div class="container-fluid">
+          <div class="d-flex align-items-center">
+            <a
+              href="{% url 'welcome' %}"
+              class="text-decoration-none d-flex align-items-center"
+            >
+              <img
+                class="logo-kecil"
+                src="{% static 'frontend/gambar/gaharu.png' %}"
+                alt="logo-kukar"
+              />
+              <span class="fw-bold ms-3 fs-4 fontimipas"> GAHARU </span>
+            </a>
+          </div>
+
+          <button
+            class="navbar-toggler bg-light"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse bg-custom rounded mt-3 mt-md-3"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav ms-lg-auto ms-3 ms-md-3">
+              <li class="nav-item me-md-3">
+                <a class="nav-link active text-light fs-6 fw-bold" href="#home"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="#pengumuman"
+                  >Pengumuman</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="#ketahananpangan"
+                  >Ketahanan Pangan</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="#Kemandirian"
+                  >Kemandirian</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="#profile"
+                  >Profile</a
+                >
+              </li>
+              <li class="nav-item me-md-3">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="#kontak"
+                  >Kontak</a
+                >
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'loginpage' %}"
+                  >{{request.user.username}}</a
+                >
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a
+                  class="nav-link active text-light fs-6 fw-bold"
+                  href="{% url 'loginpage' %}"
+                  >Login</a
+                >
+              </li>
+
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div
+        class="d-flex col-md align-items-center justify-content-center h-100"
+      >
+        <div class="text-center">
+          <img
+            src="{% static 'frontend/gambar/LogoPAS.png' %}"
+            alt="logo kukar"
+            class="mx-auto logo-besar"
+          />
+          <h1 class="fw-bold fontimipas">GAHARU</h1>
+          <h1 class="fw-bold fontimipas">E - PELAYANAN TERPADU SATU PINTU</h1>
+          <p class="col-lg-8 mx-auto fs-5 fontimipas">E - PTSP</p>
+
+          <div class="container my-5">
+            <div class="row justify-content-center g-3">
+              <!-- Card 1: Modal Trigger -->
+              <div class="col-auto">
+                <a
+                  role="button"
+                  class="text-decoration-none"
+                  data-bs-toggle="modal"
+                  data-bs-target="#pengaduanModal"
+                >
+                  <div
+                    class="card rounded-4 border-0 card-clickable"
+                    style="width: 9rem; height: 10rem"
+                  >
+                    <div
+                      class="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                    >
+                      <img
+                        src="{% static 'frontend/gambar/pengaduan3.png' %}"
+                        style="width: 60px"
+                        alt="icon"
+                      />
+                      <p class="card-text fw-bold small mt-2">FORM PENGADUAN</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Card 2: Link ke URL -->
+              <div class="col-auto">
+                <a
+                  href="{% url 'suketrekkeltani' %}"
+                  class="text-decoration-none"
+                >
+                  <div
+                    class="card rounded-4 border-0 card-clickable"
+                    style="width: 9rem; height: 10rem"
+                  >
+                    <div
+                      class="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                    >
+                      <img
+                        src="{% static 'frontend/gambar/pendaftaran.png' %}"
+                        style="width: 60px"
+                        alt="icon"
+                      />
+                      <p class="card-text fw-bold small mt-2">
+                        PENDAFTARAN BESUKAN
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!-- Card 3: Link ke URL -->
+              <div class="col-auto">
+                <a
+                  role="button"
+                  class="text-decoration-none"
+                  data-bs-toggle="modal"
+                  data-bs-target="#IjinModal"
+                >
+                  <div
+                    class="card rounded-4 border-0 card-clickable"
+                    style="width: 9rem; height: 10rem"
+                  >
+                    <div
+                      class="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                    >
+                      <img
+                        src="{% static 'frontend/gambar/ijin.png' %}"
+                        style="width: 60px"
+                        alt="icon"
+                      />
+                      <p class="card-text fw-bold small mt-2">
+                        IJIN LUAR BIASA
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Card 4: Link ke URL -->
+              <div class="col-auto">
+                <a
+                  role="button"
+                  class="text-decoration-none"
+                  data-bs-toggle="modal"
+                  data-bs-target="#BantuanHukumModal"
+                >
+                  <div
+                    class="card rounded-4 border-0 card-clickable"
+                    style="width: 9rem; height: 10rem"
+                  >
+                    <div
+                      class="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                    >
+                      <img
+                        src="{% static 'frontend/gambar/bantuanhukum.png' %}"
+                        style="width: 60px"
+                        alt="icon"
+                      />
+                      <p class="card-text fw-bold small mt-2">BANTUAN HUKUM</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Card 4: Link ke URL -->
+              <div class="col-auto">
+                <a
+                  href="{% url 'dokumen_integrasi' %}"
+                  class="text-decoration-none"
+                >
+                  <div
+                    class="card rounded-4 border-0 card-clickable"
+                    style="width: 9rem; height: 10rem"
+                  >
+                    <div
+                      class="card-body d-flex flex-column justify-content-center align-items-center text-center"
+                    >
+                      <img
+                        src="{% static 'frontend/gambar/integrasi.png' %}"
+                        style="width: 60px"
+                        alt="icon"
+                      />
+                      <p class="card-text fw-bold small mt-2">INTEGRASI</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Pop-Up Form Pengaduan -->
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="pengaduanModal"
+        tabindex="-1"
+        aria-labelledby="pengaduanModalLabel"
+        aria-hidden="true"
+      >
+        <div
+          class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down mt-5 px-3"
+        >
+          <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-0 bg-light rounded-top-4 px-3 py-3">
+              <h5
+                class="modal-title fw-semibold text-dark"
+                id="pengaduanModalLabel"
+              >
+                ✉️ Form Pengaduan Warga
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body p-3 p-md-4 bg-white rounded-bottom-4">
+              <form
+                method="post"
+                enctype="multipart/form-data"
+                class="needs-validation"
+                novalidate
+              >
+                {% csrf_token %}
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Nama Lengkap</label>
+                  <input
+                    type="text"
+                    name="name"
+                    class="form-control form-control-lg rounded-pill shadow-sm"
+                    placeholder="Masukkan nama lengkap"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    class="form-control form-control-lg rounded-pill shadow-sm"
+                    placeholder="example@email.com"
+                    required
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Nomor Telepon</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    class="form-control form-control-lg rounded-pill shadow-sm"
+                    placeholder="08xxxxxxxxxx"
+                    required
+                  />
+                </div>
+
+                <!-- Input KTP -->
+                <!-- Upload KTP -->
+                <div class="mb-3">
+                  <label class="form-label fw-semibold">Foto KTP</label>
+                  <input
+                    type="file"
+                    class="form-control form-control-lg rounded-3"
+                    id="ktp"
+                    name="ktp"
+                    required
+                  />
+                  <small class="text-muted d-block mt-1">
+                    ⚠️ Foto KTP hanya digunakan untuk memvalidasi apakah pengadu
+                    pernah berkunjung atau aduan palsu. Data KTP tidak akan
+                    disebarkan.
+                  </small>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label fw-semibold">Pesan</label>
+                  <textarea
+                    name="message"
+                    rows="4"
+                    class="form-control rounded-4 shadow-sm"
+                    placeholder="Tulis pesan atau pengaduan Anda di sini"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="d-grid">
+                  <button
+                    type="submit"
+                    class="btn btn-success rounded-pill btn-lg shadow"
+                  >
+                    📤 Kirim Pengaduan
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal ijin luar biasa -->
+      <div
+        class="modal fade"
+        id="IjinModal"
+        tabindex="-1"
+        aria-labelledby="IjinModalLabel"
+        aria-hidden="true"
+      >
+        <div
+          class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down mt-5 px-3"
+        >
+          <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-0 bg-light rounded-top-4 px-3 py-3">
+              <h5 class="modal-title fw-semibold text-dark" id="IjinModalLabel">
+                📋 Syarat Pengajuan Ijin Luar Biasa
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="modal-body p-3 p-md-4 bg-white rounded-bottom-4">
+              <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item">
+                  📄 Scan foto KTP Penjamin / Kartu Keluarga
+                </li>
+                <li class="list-group-item">📝 Surat Pernyataan Bermaterai</li>
+                <li class="list-group-item">
+                  📝 Surat Keterangan Kematian yang ditandatangani dan distempel
+                  min oleh RT (Ijin jika ada keluarga inti yang meninggal)
+                </li>
+                <li class="list-group-item">
+                  📝 Surat Keterangan Sakit dari Rumah Sakit (Ijin jika ada
+                  keluarga inti yang sakit)
+                </li>
+                <li class="list-group-item">
+                  📝 Surat Keterangan Waris (Ijin jika ada Pembagian Waris)
+                </li>
+                <li class="list-group-item">
+                  📝 Surat Keterangan dari Desa (Ijin Sebagai Wali Nikah)
+                </li>
+                <li class="list-group-item">⚠️ Alasan yang sah dan mendesak</li>
+                <li class="list-group-item">
+                  📎 Dokumen pendukung lainnya (jika ada)
+                </li>
+              </ul>
+
+              <div class="alert alert-warning small rounded-4 shadow-sm">
+                ⚠️ Pastikan seluruh persyaratan di atas sudah lengkap sebelum
+                melanjutkan ke formulir pengajuan.
+              </div>
+
+              <div class="d-flex justify-content-between mt-3">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary rounded-pill shadow-sm px-4"
+                  data-bs-dismiss="modal"
+                >
+                  ❌ Batal
+                </button>
+                <a
+                  href="{% url 'ijinluarbiasa' %}"
+                  class="btn btn-success rounded-pill btn-lg shadow px-4"
+                >
+                  ✅ Lanjutkan
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Bantuan Hukum -->
+      <div
+        class="modal fade"
+        id="BantuanHukumModal"
+        tabindex="-1"
+        aria-labelledby="BantuanHukumModalLabel"
+        aria-hidden="true"
+      >
+        <div
+          class="modal-dialog modal-dialog-centered modal-md modal-fullscreen-sm-down mt-5 px-3"
+        >
+          <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-0 bg-light rounded-top-4 px-3 py-3">
+              <h5
+                class="modal-title fw-semibold text-dark"
+                id="BantuanHukumModalLabel"
+              >
+                ⚖️ Syarat Pengajuan Bantuan Hukum
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="modal-body p-3 p-md-4 bg-white rounded-bottom-4">
+              <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item">
+                  📄 Upload KTP & KK
+                  <span class="text-danger fw-bold">(*) Wajib</span>
+                </li>
+
+                <li class="list-group-item">
+                  🏷️ Upload SKTM
+                  <span class="text-danger fw-bold">(*) Wajib</span>
+                </li>
+                <li class="list-group-item">
+                  📎 Upload Dokumen Lainnya
+                  <span class="text-muted">(Opsional)</span>
+                </li>
+              </ul>
+
+              <div class="alert alert-warning small rounded-4 shadow-sm">
+                ⚠️ Pastikan minimal dokumen <strong>KTP & KK</strong> sudah
+                dipersiapkan sebelum melanjutkan ke pengisian formulir Bantuan
+                Hukum.
+              </div>
+
+              <div class="d-flex justify-content-between mt-3">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary rounded-pill shadow-sm px-4"
+                  data-bs-dismiss="modal"
+                >
+                  ❌ Batal
+                </button>
+                <a
+                  href="{% url 'bantuan_hukum' %}"
+                  class="btn btn-success rounded-pill btn-lg shadow px-4"
+                >
+                  ✅ Lanjutkan
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main style="padding-top: 70px; background-color: white">
+      <section
+        class="container mx-auto mt-lg-5 p-5 rounded shadow-black white-box"
+        id="pengumuman"
+      >
+        <h1 class="text-center fw-bold mb-4 py-3 fs-2">
+          PENGUMUMAN TERBARU RUTAN
+        </h1>
+
+        <div class="row g-4">
+          {% for pengumuman in annc %}
+          <div class="col-sm-6 col-lg-3">
+            <a
+              href="{% url 'detail_pengumuman' pengumuman.id %}"
+              class="text-decoration-none"
+            >
+              <div class="card shadow-green h-100 rounded-4 py-4">
+                {% if pengumuman.picture %}
+                <img
+                  src="{{ pengumuman.picture }}"
+                  class="card-img-top img-fluid px-3"
+                  style="height: 180px; object-fit: cover"
+                  alt="{{ pengumuman.judul }}"
+                />
+                {% endif %}
+                <div class="card-body text-center">
+                  <!-- Judul Pengumuman -->
+                  <h2 class="card-title fw-bold">
+                    {{ pengumuman.judul|safe }}
+                  </h2>
+                  <!-- Konten Pengumuman -->
+                  <div
+                    style="
+                      display: -webkit-box;
+                      -webkit-line-clamp: 3;
+                      line-clamp: 3;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                    "
+                  >
+                    <p class="card-text">
+                      {{ pengumuman.konten|striptags|safe }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% empty %}
+          <p class="text-center">Belum ada pengumuman.</p>
+          {% endfor %}
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="d-flex justify-content-center mt-4">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              {% if annc.has_previous %}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page={{ annc.previous_page_number }}"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {% endif %} {% for num in annc.paginator.page_range %}
+              <li
+                class="page-item {% if annc.number == num %}active{% endif %}"
+              >
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+              {% endfor %} {% if annc.has_next %}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page={{ annc.next_page_number }}"
+                  aria-label="Next"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </section>
+      <section
+        class="container mx-auto mt-lg-5 p-5 rounded shadow-black white-box"
+        id="ketahananpangan"
+      >
+        <h1 class="text-center fw-bold mb-4 py-3 fs-2">KETAHANAN PANGAN</h1>
+
+        <div class="row g-4">
+          {% for item in berita %}
+          <div class="col-sm-6 col-lg-3">
+            <a
+              href="{% url 'detail_ketahananpangan' item.id %}"
+              class="text-decoration-none"
+            >
+              <div class="card shadow-green h-100 rounded-4 py-4">
+                {% if item.gambar %}
+                <img
+                  src="{{ item.gambar }}"
+                  class="card-img-top img-fluid px-3"
+                  style="height: 180px; object-fit: cover"
+                  alt="{{ item.judul }}"
+                />
+                {% endif %}
+                <div class="card-body text-center">
+                  <!-- Judul -->
+                  <h2 class="card-title fw-bold">{{ item.judul|safe }}</h2>
+                  <!-- Konten -->
+                  <div
+                    style="
+                      display: -webkit-box;
+                      -webkit-line-clamp: 3;
+                      line-clamp: 3;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                    "
+                  >
+                    <p class="card-text">{{ item.konten|striptags|safe }}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% empty %}
+          <p class="text-center">Belum ada berita ketahanan pangan.</p>
+          {% endfor %}
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="d-flex justify-content-center mt-4">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              {% if berita.has_previous %}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page={{ berita.previous_page_number }}"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {% endif %} {% for num in berita.paginator.page_range %}
+              <li
+                class="page-item {% if berita.number == num %}active{% endif %}"
+              >
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+              {% endfor %} {% if berita.has_next %}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page={{ berita.next_page_number }}"
+                  aria-label="Next"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <section
+        class="container mx-auto mt-lg-5 p-5 rounded shadow-black white-box"
+        id="Kemandirian"
+      >
+        <h1 class="text-center fw-bold mb-4 py-3 fs-2">KEMANDIRIAN</h1>
+
+        <div class="row g-4">
+          {% for item in blog_posts %}
+          <div class="col-sm-6 col-lg-3">
+            <a
+              href="{% url 'detail_blog' item.id %}"
+              class="text-decoration-none"
+            >
+              <div class="card shadow-green h-100 rounded-4 py-4">
+                {% if item.picture %}
+                <img
+                  src="{{ item.picture }}"
+                  class="card-img-top img-fluid px-3"
+                  style="height: 180px; object-fit: cover"
+                  alt="{{ item.judul }}"
+                />
+                {% endif %}
+                <div class="card-body text-center">
+                  <!-- Judul -->
+                  <h2 class="card-title fw-bold">{{ item.judul|safe }}</h2>
+                  <!-- Konten -->
+                  <div
+                    style="
+                      display: -webkit-box;
+                      -webkit-line-clamp: 3;
+                      line-clamp: 3;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                    "
+                  >
+                    <p class="card-text">{{ item.konten|striptags|safe }}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% empty %}
+          <p class="text-center">Belum ada berita ketahanan pangan.</p>
+          {% endfor %}
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="d-flex justify-content-center mt-4">
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              {% if berita.has_previous %}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page={{ berita.previous_page_number }}"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              {% endif %} {% for num in berita.paginator.page_range %}
+              <li
+                class="page-item {% if berita.number == num %}active{% endif %}"
+              >
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+              {% endfor %} {% if berita.has_next %}
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  href="?page={{ berita.next_page_number }}"
+                  aria-label="Next"
+                >
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <section
+        class="container mx-auto mt-lg-5 mt-md-5 p-5 rounded shadow-black white-box"
+        id="profile"
+      >
+        <h1 class="text-center fw-bold mb-4 py-3 fs-2">PROFILE RUTAN</h1>
+        <div
+          class="d-lg-flex flex-lg-row flex-md-column justify-content-center align-items-center gap-5"
+        >
+          <div class="d-flex justify-content-center position-relative">
+            <img
+              src="{% static 'frontend/gambar/rutandepan.png' %}"
+              class="kepaldes shadow-green rounded-4"
+              alt="rutan"
+            />
+            <div class="overlay-dark"></div>
+          </div>
+
+          <div class="d-flex justify-content-center align-items-center my-4">
+            <p class="fs-5 fw-bold lh-lg" style="text-align: justify">
+              Rumah Tahanan Negara (Rutan) Kelas IIB Tanjung redeb adalah salah
+              satu Unit Pelaksana Teknis dari Kementerian imigrasi dan
+              pemasyarakatan republik Indonesia  yang mempunyai peranan penting
+              dalam menjaga keamanan dan ketertiban Narapidanan/Tahanan (WBP).
+              Rumah Tahanan Negara Tanjung Redeb berdiri sejak 22 mei 1995.
+              Rutan ini berada di bawah naungan kantor direktorat jendral
+              Pemasyarakatan Kalimantan timur. Rumah Tahanan Negara Kelas IIB
+              Tanjung Redeb beralamat di: Jl. DR. Murjani II, Kelurahan Karang
+              Ambun, Kecamatan Tanjung Redeb, Kabupaten Berau, Kalimantan Timur
+              77315 dan berdiri diatas tanah seluas 8,975 M, dan 4,730M2 luas
+              bangunan keseluruhan. Lokasi ini berada di tengah kota
+              Tanjung Redeb – ibu kota Kabupaten Berau, di kawasan pemukiman dan
+              dekat fasilitas pemerintah
+            </p>
+          </div>
+        </div>
+      </section>
+      <section
+        class="container mx-auto mt-lg-5 mt-md-5 p-5 rounded shadow-black white-box"
+        id=""
+      >
+        <h1 class="text-center fw-bold mb-4 fs-2">SERBA-SERBI RUTAN</h1>
+        <div
+          class="d-lg-flex flex-lg-row flex-md-column justify-content-center align-items-center gap-5"
+        >
+          <div class="my-4">
+            <p class="fs-5 fw-bold lh-lg" style="text-align: justify">
+              Rutan Kelas IIB Tanjung Redeb tidak hanya menjadi tempat menjalani
+              pidana, melainkan juga pusat pembinaan yang menghadirkan beragam
+              warna kehidupan, di mana para Warga Binaan Pemasyarakatan
+              diberikan kesempatan menuntaskan pendidikan formal Paket A, B, dan
+              C sebagai bekal menata masa depan, dibiasakan dengan semangat
+              gotong royong dan kepedulian lingkungan melalui kegiatan Jum’at
+              Bersih, serta ditanamkan nilai disiplin, integritas, dan
+              kebersamaan lewat apel pagi pegawai yang rutin dilaksanakan,
+              sementara momen pemberian remisi pada hari-hari besar seperti HUT
+              Kemerdekaan menjadi pengingat akan arti syukur dan tanggung jawab
+              baru bagi yang bebas, dan di sisi lain keberhasilan pengelolaan
+              koperasi yang meraih predikat terbaik tingkat Kabupaten Berau
+              menegaskan bahwa Rutan ini senantiasa berkomitmen menghadirkan
+              pelayanan pemasyarakatan yang humanis, transparan, dan penuh
+              inovasi.
+            </p>
+            <div
+              id="carouselExampleAutoplaying"
+              class="carousel slide shadow-green"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img
+                    src="{% static 'frontend/gambar/slide1.jpg' %}"
+                    class="d-block w-100 img-fluid cr"
+                    alt="cr1"
+                  />
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="{% static 'frontend/gambar/slide2.jpg' %}"
+                    class="d-block w-100 img-fluid cr"
+                    alt="cr2"
+                  />
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="{% static 'frontend/gambar/slide3.jpg' %}"
+                    class="d-block w-100 img-fluid cr"
+                    alt="cr3"
+                  />
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="{% static 'frontend/gambar/slide4.jpg' %}"
+                    class="d-block w-100 img-fluid cr"
+                    alt="cr4"
+                  />
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="{% static 'frontend/gambar/slide5.jpg' %}"
+                    class="d-block w-100 img-fluid cr"
+                    alt="cr4"
+                  />
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+          <div
+            class="d-flex justify-content-center clip-irregular shadow-green rounded-4"
+          >
+            <img
+              src="{% static 'frontend/gambar/story.png' %}"
+              class="pondok rounded-4"
+              alt="desa"
+            />
+          </div>
+        </div>
+      </section>
+      <section class="container my-5 py-5 shadow-black rounded" id="kontak">
+        <div class="container">
+          <div class="row">
+            <!-- Bagian Gambar dan Informasi Kontak -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+              <div class="position-relative h-100">
+                <img
+                  src="{% static 'frontend/gambar/pengaduan2.png' %}"
+                  alt="ContactUs Bootstrap section"
+                  class="img-fluid rounded-3 h-100 w-100"
+                />
+                <h1
+                  class="position-absolute top-0 start-0 ms-4 mt-4 text-white display-4 fw-bold"
+                >
+                  Kontak Kami
+                </h1>
+                <div class="position-absolute bottom-0 w-100 p-4">
+                  <div class="bg-white p-3 rounded">
+                    <!-- Bagian Kontak -->
+                    <div class="d-flex align-items-center mb-3">
+                      <!-- SVG Ikon -->
+                      <div class="me-3">
+                        <svg
+                          width="30"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M22.3092 18.3098C22.0157 18.198 21.8689 18.1421 21.7145 18.1287C21.56 18.1154 21.4058 18.1453 21.0975 18.205L17.8126 18.8416C17.4392 18.9139 17.2525 18.9501 17.0616 18.9206C16.8707 18.891 16.7141 18.8058 16.4008 18.6353C13.8644 17.2551 12.1853 15.6617 11.1192 13.3695C10.9964 13.1055 10.935 12.9735 10.9133 12.8017C10.8917 12.6298 10.9218 12.4684 10.982 12.1456L11.6196 8.72559C11.6759 8.42342 11.7041 8.27233 11.6908 8.12115C11.6775 7.96998 11.6234 7.82612 11.5153 7.5384L10.6314 5.18758C10.37 4.49217 10.2392 4.14447 9.95437 3.94723C9.6695 3.75 9.29804 3.75 8.5551 3.75H5.85778C4.58478 3.75 3.58264 4.8018 3.77336 6.06012C4.24735 9.20085 5.64674 14.8966 9.73544 18.9853C14.0295 23.2794 20.2151 25.1426 23.6187 25.884C24.9335 26.1696 26.0993 25.1448 26.0993 23.7985V21.2824C26.0993 20.5428 26.0993 20.173 25.9034 19.8888C25.7076 19.6046 25.362 19.4729 24.6708 19.2096L22.3092 18.3098Z"
+                            stroke="#15803D"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h5 class="mb-1">Bpk.xxxxxxxxxxxxx</h5>
+                        <h5>08xxxxxxxxxxxxxx</h5>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                      <!-- SVG Ikon -->
+                      <div class="me-3">
+                        <svg
+                          width="30"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M2.81501 8.75L10.1985 13.6191C12.8358 15.2015 14.1544 15.9927 15.6032 15.9582C17.0519 15.9237 18.3315 15.0707 20.8905 13.3647L27.185 8.75M12.5 25H17.5C22.214 25 24.5711 25 26.0355 23.5355C27.5 22.0711 27.5 19.714 27.5 15C27.5 10.286 27.5 7.92893 26.0355 6.46447C24.5711 5 22.214 5 17.5 5H12.5C7.78595 5 5.42893 5 3.96447 6.46447C2.5 7.92893 2.5 10.286 2.5 15C2.5 19.714 2.5 22.0711 3.96447 23.5355C5.42893 25 7.78595 25 12.5 25Z"
+                            stroke="#15803D"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <h5>rutanxxxxxxxxxx@gmail.com</h5>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <!-- SVG Ikon -->
+                      <div class="me-3">
+                        <svg
+                          width="30"
+                          height="30"
+                          viewBox="0 0 30 30"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25 12.9169C25 17.716 21.1939 21.5832 18.2779 24.9828C16.8385 26.6609 16.1188 27.5 15 27.5C13.8812 27.5 13.1615 26.6609 11.7221 24.9828C8.80612 21.5832 5 17.716 5 12.9169C5 10.1542 6.05357 7.5046 7.92893 5.55105C9.8043 3.59749 12.3478 2.5 15 2.5C17.6522 2.5 20.1957 3.59749 22.0711 5.55105C23.9464 7.5046 25 10.1542 25 12.9169Z"
+                            stroke="#15803D"
+                            stroke-width="2"
+                          />
+                          <path
+                            d="M17.5 11.6148C17.5 13.0531 16.3807 14.219 15 14.219C13.6193 14.219 12.5 13.0531 12.5 11.6148C12.5 10.1765 13.6193 9.01058 15 9.01058C16.3807 9.01058 17.5 10.1765 17.5 11.6148Z"
+                            stroke="#15803D"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                      <h5>
+                        Kalimantan Timur, Kab. Kutai Kartanegara, Kec.
+                        Tenggarong Seberang, 75572
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulir Pengaduan -->
+            <div class="col-lg-6">
+              <div class="p-3">
+                <h2 class="fw-bold text-success mb-4">
+                  Berani Melapor, Wujud Kejujuran
+                </h2>
+                <p class="fs-5 fw-bold lh-lg" style="text-align: justify">
+                  Kejujuran adalah fondasi dari pelayanan yang bersih dan
+                  bermartabat. Di sini, suara Anda memiliki arti. Kami percaya
+                  bahwa keterbukaan dan keberanian untuk melapor merupakan
+                  langkah awal untuk perubahan yang nyata.
+                </p>
+                <p class="fs-5 fw-bold lh-lg" style="text-align: justify">
+                  Jangan ragu untuk menyampaikan kritik, saran, atau pengaduan
+                  atas pelayanan kami. Setiap laporan Anda akan kami tindak
+                  lanjuti dengan penuh tanggung jawab dan tanpa diskriminasi.
+                </p>
+                <p class="fs-5 fw-bold lh-lg" style="text-align: justify">
+                  Mari bersama-sama kita ciptakan lingkungan yang bersih, adil,
+                  dan transparan. Karena keberanian Anda untuk melapor adalah
+                  kekuatan kita untuk memperbaiki.
+                </p>
+                <p class="fs-5 fw-bold lh-lg" style="text-align: justify">
+                  “Berani Melapor, Berani Jujur – Untuk Pelayanan yang Lebih
+                  Baik.”
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer bg-light text-dark py-5">
+      <div class="container">
+        <div class="row align-items-start">
+          <!-- Kolom Logo dan Deskripsi -->
+          <div class="col-md-4 mb-4">
+            <img
+              src="{% static 'frontend/gambar/gaharu.png'%}"
+              class="mb-3"
+              alt="Logo kukar"
+              style="height: 60px"
+            />
+            <p class="mb-0 fw-semibold">Rutan Tanjung Redeb</p>
+            <small class="text-muted">
+              Kalimantan Timur, Kabupaten Berau
+            </small>
+          </div>
+
+          <!-- Kolom Kontak -->
+          <div class="col-md-4 mb-4">
+            <h6 class="fw-bold mb-3">Hubungi Kami</h6>
+            <p class="mb-2">
+              Jl. DR. Murjani II, Gayam, Kec. Tj. Redeb, Kabupaten Berau,
+              Kalimantan Timur 77315
+            </p>
+            <p class="mb-1">
+              <a
+                href="tel:0822-5546-2424"
+                class="text-decoration-none text-dark"
+              >
+                📞 Telepon : 08xxxxxxxxxxxxx
+              </a>
+            </p>
+            <p class="mb-0">
+              <a
+                href="mailto:rutanxxxxxxxx@gmail.com"
+                class="text-decoration-none text-dark"
+              >
+                ✉️ Email : rutanxxxxxxxx@gmail.com
+              </a>
+            </p>
+          </div>
+
+          <!-- Kolom Sosial Media -->
+          <div class="col-md-4 mb-4 text-md-end text-center">
+            <h6 class="fw-bold mb-3">Ikuti Kami</h6>
+            <div
+              class="d-flex justify-content-md-end justify-content-center gap-3"
+            >
+              <a href="https://www.facebook.com/RutanBerau/?locale=id_ID">
+                <img
+                  src="{% static 'frontend/gambar/fb.svg'%}"
+                  alt="Facebook"
+                  style="width: 36px"
+                />
+              </a>
+              <a
+                href="https://www.instagram.com/rutantanjungredeb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              >
+                <img
+                  src="{% static 'frontend/gambar/ig.png'%}"
+                  alt="Instagram"
+                  style="width: 36px"
+                />
+              </a>
+              <a href="https://youtu.be/nOFqH1dfZCw?si=rnIMyB0wNoUaqubs">
+                <img
+                  src="{% static 'frontend/gambar/yt.svg'%}"
+                  alt="YouTube"
+                  style="width: 36px"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="text-center mt-4 pt-3 border-top">
+          <div class="copyright">
+            &copy; Copyright
+            <strong><span>RUTAN KELAS IIB TANJUNG REDEB</span></strong
+            >. All Rights Reserved
+          </div>
+          <div class="credits small text-muted">
+            Designed by
+            <a
+              href="https://www.instagram.com/ariiahmad_/"
+              class="text-decoration-none fw-semibold"
+            >
+              ARI AHMAD DHANI
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'frontend/js/bootstrap.min.js' %}"></script>
+    <script>
+      window.addEventListener("scroll", function () {
+        var navbar = document.getElementById("navbar");
+        if (window.scrollY > 50) {
+          // Scroll threshold, 50px misalnya
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      });
+    </script>
+    <script>
+      function navigateToPage() {
+        const select = document.getElementById("surat-select");
+        const selectedValue = select.value;
+        if (selectedValue) {
+          window.location.href = selectedValue;
+        }
+      }
+    </script>
+    <!-- Modal Form Pengaduan -->
+    <!-- CDN SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- SweetAlert2 Feedback -->
+    {% if messages %}
+    <script>
+      {% for message in messages %}
+        Swal.fire({
+          icon: "{% if message.tags == 'success' %}success{% else %}error{% endif %}",
+          title: "{{ message.tags|capfirst }}!",
+          text: "{{ message }}",
+          confirmButtonColor: "#3085d6"
+        });
+      {% endfor %}
+    </script>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,120 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-6">
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="card-body p-5">
+        <!-- Logo Section -->
+        <div class="text-center mb-4">
+          <img
+            class="logo-kecil mb-3"
+            src="{% static 'frontend/gambar/Logo_imipas.png' %}"
+            alt="Logo kukar"
+            style="width: 100px"
+          />
+          <h3 class="fw-bold text-primary">Daftar Akun Admin</h3>
+          <p class="text-muted">Isi form di bawah untuk membuat akun</p>
+        </div>
+
+        <!-- Registration Form -->
+        {% if error %}
+        <div
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          <strong>Error:</strong> {{ error }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Username Field -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control form-control-lg rounded-3"
+              id="username"
+              name="username"
+              required
+            />
+          </div>
+
+          <!-- First Name Field -->
+          <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input
+              type="text"
+              class="form-control form-control-lg rounded-3"
+              id="first_name"
+              name="first_name"
+              required
+            />
+          </div>
+
+          <!-- Last Name Field -->
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input
+              type="text"
+              class="form-control form-control-lg rounded-3"
+              id="last_name"
+              name="last_name"
+              required
+            />
+          </div>
+
+          <!-- Email Field -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control form-control-lg rounded-3"
+              id="email"
+              name="email"
+              required
+            />
+          </div>
+
+          <!-- Password Fields -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control form-control-lg rounded-3"
+              id="password"
+              name="password1"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="password2" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control form-control-lg rounded-3"
+              id="password2"
+              name="password2"
+              required
+            />
+          </div>
+
+          <!-- Register Button -->
+          <div class="d-grid mb-3">
+            <button type="submit" class="btn btn-primary btn-lg rounded-3">
+              Register
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock konten %}

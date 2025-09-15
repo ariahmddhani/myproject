@@ -1,0 +1,167 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% block konten %}
+<div class="pagetitle">
+  <h1>BANTUAN HUKUM</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active">Detail Bantuan Hukum</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="section profile">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body pt-3">
+          <div class="tab-content pt-2">
+            <div class="tab-pane fade show active profile-overview">
+              <h5 class="card-title">Data Pengaju</h5>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Nama</div>
+                <div class="col-lg-9 col-md-8">{{ bh.nama_pengaju }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">No. KTP</div>
+                <div class="col-lg-9 col-md-8">{{ bh.ktp_pengaju }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Alamat</div>
+                <div class="col-lg-9 col-md-8">{{ bh.alamat_pengaju }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Hubungan</div>
+                <div class="col-lg-9 col-md-8">{{ bh.hubungan }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">No. HP</div>
+                <div class="col-lg-9 col-md-8">{{ bh.no_hp }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Pekerjaan</div>
+                <div class="col-lg-9 col-md-8">{{ bh.pekerjaan_pengaju }}</div>
+              </div>
+
+              <h5 class="card-title mt-4">Data WBP</h5>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Nama WBP</div>
+                <div class="col-lg-9 col-md-8">{{ bh.nama_wbp }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Blok</div>
+                <div class="col-lg-9 col-md-8">{{ bh.blok_wbp }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Pasal</div>
+                <div class="col-lg-9 col-md-8">{{ bh.pasal }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Lama Hukuman</div>
+                <div class="col-lg-9 col-md-8">{{ bh.lama_hukuman }} Tahun</div>
+              </div>
+
+              <h5 class="card-title mt-4">Permasalahan</h5>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Kategori</div>
+                <div class="col-lg-9 col-md-8">
+                  {{ bh.kategori_permasalahan }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Kronologi</div>
+                <div class="col-lg-9 col-md-8">{{ bh.kronologi }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Jenis Bantuan</div>
+                <div class="col-lg-9 col-md-8">{{ bh.jenis_bantuan }}</div>
+              </div>
+
+              <h5 class="card-title mt-4">Dokumen</h5>
+              <!-- Dokumen KTP & KK -->
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Dokumen KTP & KK</div>
+                <div class="col-lg-9 col-md-8">
+                  {% if bh.dokumen_ktp_kk %}
+                  <a href="{{ bh.dokumen_ktp_kk.url }}" download>
+                    Download Dokumen
+                  </a>
+                  {% else %} - {% endif %}
+                </div>
+              </div>
+
+              <!-- Dokumen Surat Kuasa -->
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Surat Kuasa</div>
+                <div class="col-lg-9 col-md-8">
+                  {% if bh.dokumen_surat_kuasa %}
+                  <a href="{{ bh.dokumen_surat_kuasa.url }}" download>
+                    Download Dokumen
+                  </a>
+                  {% else %} - {% endif %}
+                </div>
+              </div>
+
+              <!-- dan seterusnya untuk SKTM, Putusan, Lainnya -->
+
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">SKTM</div>
+                <div class="col-lg-9 col-md-8">
+                  {% if bh.dokumen_sktm %}<a
+                    href="{{ bh.dokumen_sktm.url }}"
+                    download
+                  >
+                    Download Dokumen</a
+                  >{% else %}-{% endif %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Putusan</div>
+                <div class="col-lg-9 col-md-8">
+                  {% if bh.dokumen_putusan %}<a
+                    href="{{ bh.dokumen_putusan.url }}"
+                    download
+                  >
+                    Download Dokumen</a
+                  >{% else %}-{% endif %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Dokumen Lainnya</div>
+                <div class="col-lg-9 col-md-8">
+                  {% if bh.dokumen_lainnya %}<a
+                    href="{{ bh.dokumen_lainnya.url }}"
+                    download
+                  >
+                    Download Dokumen</a
+                  >{% else %}-{% endif %}
+                </div>
+              </div>
+
+              <h5 class="card-title mt-4">Sistem</h5>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Tanggal Pengajuan</div>
+                <div class="col-lg-9 col-md-8">{{ bh.tanggal_pengajuan }}</div>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 label">Status</div>
+                <div class="col-lg-9 col-md-8">
+                  {% if bh.status == "review" %}<span
+                    class="badge bg-warning text-dark"
+                    >Proses Review</span
+                  >
+                  {% elif bh.status == "approved" %}<span
+                    class="badge bg-success"
+                    >Disetujui</span
+                  >
+                  {% else %}<span class="badge bg-danger">Ditolak</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock konten %}

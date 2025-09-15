@@ -1,0 +1,47 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %} {% block konten %}
+
+<!-- Main News Card -->
+<div class="card mb-4">
+  <!-- News Image -->
+  <img
+    src="main-news-image.jpg"
+    class="card-img-top img-fluid"
+    alt="Main News Image"
+  />
+
+  <!-- Card Body -->
+  <div class="card-body">
+    <!-- News Title -->
+    <h2 class="card-title">Judul Berita Utama</h2>
+
+    <!-- News Content -->
+    <p class="card-text">
+      Ini adalah konten berita utama. Konten ini memuat informasi terperinci
+      tentang berita tersebut. Pengguna dapat membaca lebih banyak berita
+      penting di bagian ini.
+    </p>
+  </div>
+</div>
+
+<!-- List of Latest News -->
+<div class="card mb-4">
+  <div class="card-header">Berita Terbaru</div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <a href="#">Judul Berita Terbaru 1</a>
+    </li>
+    <li class="list-group-item">
+      <a href="#">Judul Berita Terbaru 2</a>
+    </li>
+    <li class="list-group-item">
+      <a href="#">Judul Berita Terbaru 3</a>
+    </li>
+    <li class="list-group-item">
+      <a href="#">Judul Berita Terbaru 4</a>
+    </li>
+    <li class="list-group-item">
+      <a href="#">Judul Berita Terbaru 5</a>
+    </li>
+  </ul>
+</div>
+{% endblock konten %}

@@ -1,0 +1,68 @@
+{% extends "frontend/base_post.html" %} {% load static %} {% block konten %}
+
+<main class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <!-- Logo Section -->
+          <div class="text-center mb-4">
+            <img
+              class="logo-kecil mb-3"
+              src="{% static 'frontend/gambar/logo_gaharu.png' %}"
+              alt="logo-kukar"
+              style="width: 100px"
+            />
+            <h3 class="fw-bold text-primary">Selamat Datang!</h3>
+            <p class="text-muted">Silakan login untuk melanjutkan</p>
+          </div>
+
+          <!-- Login Form -->
+          <form method="POST">
+            {% csrf_token %}
+
+            <!-- Username Field -->
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input
+                type="text"
+                class="form-control form-control-lg rounded-3"
+                id="username"
+                name="username"
+                required
+              />
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control form-control-lg rounded-3"
+                id="password"
+                name="password"
+                required
+              />
+            </div>
+
+            <!-- Login Button -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary btn-lg rounded-3">
+                Login
+              </button>
+            </div>
+
+            <!-- Register and Forgot Password Links -->
+            <div class="text-center">
+              <p>
+                Belum punya akun?
+                <a href="{% url 'register' %}">Daftar disini</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock konten %}

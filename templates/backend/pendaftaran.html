@@ -1,0 +1,787 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div>
+  <style>
+    .running-text span {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+    }
+
+    @keyframes marquee {
+      0%   { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+  
+    .label-left {
+      display: block;       /* biar full baris */
+      text-align: left;     /* pastikan rata kiri */
+      font-weight: 600;     /* tetap tebal kalau mau */
+      margin-bottom: 5px;   /* jarak ke input */
+    }
+
+  </style>
+  <div class="pagetitle">
+    <h1>Besukan Online</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Pendaftaran Besukan Online</li>
+      </ol>
+    </nav>
+  </div>
+  {% if value %}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">pendaftaran</h5>
+
+      <!-- End General Form Elements -->
+    </div>
+  </div>
+  {% else %}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Daftar Besukan Online</h5>
+
+      <div class="mt-3 mb-3">
+        <!-- Tombol daftar atau notifikasi -->
+        {% if allow_tambah_surat %}
+          <!-- Kalau aktif -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#formModal"
+          >
+            Daftar Besukan
+          </button>
+        {% else %}
+          <!-- Kalau nonaktif -->
+          {% if request.user.is_superuser %}
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-toggle="modal"
+              data-bs-target="#formModal"
+            >
+              Daftar Besukan
+            </button>
+          {% else %}
+            <div class="mb-3">
+              <div class="bg-danger text-white p-2 rounded overflow-hidden position-relative" style="height: 40px;">
+                <div class="running-text position-absolute w-100">
+                  <span>
+                    Pendaftaran dibuka pukul 3 sore sampai jam 8 pagi — Jika sudah melewati jam tersebut, silakan hubungi admin.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          {% endif %}
+        {% endif %}
+
+        <!-- Switch khusus admin di bawah tombol -->
+        {% if request.user.is_superuser %}
+          <div class="form-check form-switch mt-3">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="toggleTambahSurat"
+              {% if allow_tambah_surat %}checked{% endif %}
+            />
+            <label class="form-check-label" for="toggleTambahSurat">
+              Buka/Tutup Pendaftaran
+            </label>
+          </div>
+        {% endif %}
+      </div>
+
+
+
+      <div class="table-responsive">
+        <table class="table datatable">
+          <thead>
+            <tr>
+              <th>Nama Pengaju</th>
+              <th>Nama WBP</th>
+              <th>Tanggal Kunjungan</th>
+              <th>Status</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for surat in suket %}
+            <tr>
+              <td>
+                <a href="{% url 'detail_suketrekkeltani' surat.id %}">
+                  {{ surat.nama }}
+                </a>
+              </td>
+              <td>{{ surat.namawbp }}</td>
+              <td>{{ surat.tanggal_kunjungan }}</td>
+              <td>
+                {% if surat.status == "review" %}
+                <span class="text-warning fw-bold">Proses Review</span>
+                {% elif surat.status == "approved" %}
+                <span class="text-success fw-bold">Disetujui</span>
+                {% elif surat.status == "rejected" %}
+                <span class="text-danger fw-bold">Ditolak</span>
+                {% if surat.catatan_admin %}
+                <br />
+                <small
+                  class="d-block"
+                  style="word-break: break-word; max-width: 250px"
+                >
+                  Alasan: {{ surat.catatan_admin }}
+                </small>
+                {% endif %} {% endif %}
+              </td>
+              <td class="text-center">
+                <div
+                  class="btn-group gap-2"
+                  role="group"
+                  aria-label="Action buttons"
+                >
+                  {% if not user.is_superuser %}
+                  <!-- Tombol Edit -->
+                <!-- Tombol Edit -->
+                  <button
+                    type="button"
+                    class="btn btn-warning btn-sm rounded-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEditSuket{{ surat.id }}"
+                  >
+                    <i class="bi bi-pencil-square text-white"></i>
+                  </button>
+
+                  <!-- Modal Edit -->
+                 
+                  <div class="modal fade" id="modalEditSuket{{ surat.id }}" tabindex="-1" aria-labelledby="modalEditLabel{{ surat.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content border-0 shadow-lg rounded-4">
+                        <div class="modal-header border-0 bg-success bg-opacity-10 rounded-top-4">
+                          <h5 class="modal-title fw-semibold text-success" id="modalEditLabel{{ surat.id }}">
+                            ✏️ Edit Data Kunjungan
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body p-3 p-md-4 bg-white rounded-bottom-4">
+                          <div class="card border-0 shadow-sm rounded-4">
+                            <div class="card-body">
+                              <form method="post" action="{% url 'edit_suketrekkeltani' surat.id %}" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                <!-- DATA PENGUNJUNG -->
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Nama Lengkap</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" 
+                                        name="nama" value="{{ surat.nama }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Email</label>
+                                  <input type="email" class="form-control form-control-lg rounded-3 shadow-sm" 
+                                        name="email" value="{{ surat.email }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">No Telepon</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" 
+                                        name="telepon" value="{{ surat.telepone }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Nomor KTP</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" 
+                                        name="ktp" value="{{ surat.ktp }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Tempat, Tanggal Lahir</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" 
+                                        name="ttl" value="{{ surat.ttl }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Alamat</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" 
+                                        name="alamat" value="{{ surat.alamat }}" required />
+                                </div>
+
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left ">Nama WBP</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" name="namawbp" value="{{ surat.namawbp }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Hubungan dengan WBP</label>
+                                  <input type="text" class="form-control form-control-lg rounded-3 shadow-sm" name="hubungan" value="{{ surat.hubungan }}" required />
+                                </div>
+
+                                <!-- DATA KUNJUNGAN -->
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Tanggal Kunjungan</label>
+                                  <input type="date" class="form-control form-control-lg rounded-3 shadow-sm" name="tanggal_kunjungan" value="{{ surat.tanggal_kunjungan|date:'Y-m-d' }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Jam Kunjungan</label>
+                                  <input type="time" class="form-control form-control-lg rounded-3 shadow-sm" name="jam_kunjungan" value="{{ surat.jam_kunjungan|time:'H:i' }}" required />
+                                </div>
+
+                                <div class="mb-3">
+                                  <label class="form-label label-left">Jenis Kunjungan</label>
+                                  <select class="form-select form-select-lg rounded-3 shadow-sm" name="jenis_kunjungan" required>
+                                    <option value="">-- Pilih Jenis --</option>
+                                    <option value="Besukan" {% if surat.jenis_kunjungan == "Besukan" %}selected{% endif %}>Besukan</option>
+                                    <option value="Titipan" {% if surat.jenis_kunjungan == "Titipan" %}selected{% endif %}>Titipan</option>
+                                  </select>
+                                </div>
+
+                                <!-- PENGIKUT -->
+                                <h5 class="fw-semibold mt-4 mb-3 text-success">👥 Daftar Pengikut</h5>
+                                <div class="table-responsive">
+                                  <table class="table table-bordered align-middle shadow-sm rounded-3">
+                                    <thead class="table-light">
+                                      <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                        <th>Kategori</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for p in surat.pengikut.all %}
+                                      <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td><input type="text" name="pengikut_nama_{{ p.id }}" class="form-control" value="{{ p.nama }}"></td>
+                                        <td><input type="text" name="pengikut_nik_{{ p.id }}" class="form-control" value="{{ p.nik }}"></td>
+                                        <td>
+                                          <select name="pengikut_kategori_{{ p.id }}" class="form-select">
+                                            <option value="laki" {% if p.kategori == "laki" %}selected{% endif %}>Laki-laki</option>
+                                            <option value="perempuan" {% if p.kategori == "perempuan" %}selected{% endif %}>Perempuan</option>
+                                            <option value="anak" {% if p.kategori == "anak" %}selected{% endif %}>Anak-anak</option>
+                                          </select>
+                                        </td>
+                                      </tr>
+                                      {% empty %}
+                                    <tbody>
+                                      {% if surat.pengikut.all %}
+                                        {% for p in surat.pengikut.all %}
+                                        <tr>
+                                          <td>{{ forloop.counter }}</td>
+                                          <td><input type="text" name="pengikut_nama_{{ p.id }}" class="form-control" value="{{ p.nama }}"></td>
+                                          <td><input type="text" name="pengikut_nik_{{ p.id }}" class="form-control" value="{{ p.nik }}"></td>
+                                          <td>
+                                            <select name="pengikut_kategori_{{ p.id }}" class="form-select">
+                                              <option value="laki" {% if p.kategori == "laki" %}selected{% endif %}>Laki-laki</option>
+                                              <option value="perempuan" {% if p.kategori == "perempuan" %}selected{% endif %}>Perempuan</option>
+                                              <option value="anak" {% if p.kategori == "anak" %}selected{% endif %}>Anak-anak</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                        {% endfor %}
+                                      {% else %}
+                                        {% for i in "123456" %}
+                                        <tr>
+                                          <td>{{ forloop.counter }}</td>
+                                          <td><input type="text" name="pengikut_nama_new{{ forloop.counter }}" class="form-control" placeholder="Nama pengikut"></td>
+                                          <td><input type="text" name="pengikut_nik_new{{ forloop.counter }}" class="form-control" placeholder="NIK"></td>
+                                          <td>
+                                            <select name="pengikut_kategori_new{{ forloop.counter }}" class="form-select">
+                                              <option value="">-- Pilih --</option>
+                                              <option value="laki">Laki-laki</option>
+                                              <option value="perempuan">Perempuan</option>
+                                              <option value="anak">Anak-anak</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                        {% endfor %}
+                                      {% endif %}
+                                    </tbody>
+
+
+                                      {% endfor %}
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                                <!-- BARANG BAWAAN -->
+                                <h5 class="fw-semibold mt-4 mb-3 text-success">🍱 Barang Bawaan</h5>
+                                <div id="barang-bawaan">
+                                  {% if barang_list %}
+                                    {% for barang in barang_list %}
+                                    <div class="row g-2 mb-2">
+                                      <div class="col-md-6">
+                                        <input type="text" name="barang_nama_{{ forloop.counter }}" class="form-control" value="{{ barang.nama }}" placeholder="Nama makanan" />
+                                      </div>
+                                      <div class="col-md-3">
+                                        <input type="number" name="barang_jumlah_{{ forloop.counter }}" class="form-control" value="{{ barang.jumlah }}" min="0" placeholder="Jumlah" />
+                                      </div>
+                                      <div class="col-md-3">
+                                        <input type="text" name="barang_satuan_{{ forloop.counter }}" class="form-control" value="{{ barang.satuan }}" placeholder="Satuan" />
+                                      </div>
+                                    </div>
+                                    {% endfor %}
+                                  {% else %}
+                                    {% for i in "123456" %}
+                                    <div class="row g-2 mb-2">
+                                      <div class="col-md-6">
+                                        <input type="text" name="barang_nama_{{ forloop.counter }}" class="form-control" placeholder="Nama makanan" />
+                                      </div>
+                                      <div class="col-md-3">
+                                        <input type="number" name="barang_jumlah_{{ forloop.counter }}" class="form-control" placeholder="Jumlah" min="0" />
+                                      </div>
+                                      <div class="col-md-3">
+                                        <input type="text" name="barang_satuan_{{ forloop.counter }}" class="form-control" placeholder="Satuan" />
+                                      </div>
+                                    </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+
+                                <!-- SUBMIT -->
+                                <div class="d-grid mt-4">
+                                  <button type="submit" class="btn btn-success rounded-pill btn-lg shadow">
+                                    💾 Simpan Perubahan
+                                  </button>
+                                  <a href="{% url 'suketrekkeltani' %}" class="btn btn-secondary rounded-pill btn-lg shadow mt-2">❌ Batal</a>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tombol Hapus -->
+                  <a
+                    href="{% url 'delete_suketrekkeltani' surat.id %}"
+                    class="btn btn-danger btn-sm rounded-3"
+                    onclick="return confirm('Hapus data ini?')"
+                  >
+                    <i class="bi bi-trash3-fill text-white"></i>
+                  </a>
+
+                  <!-- Tombol Cetak -->
+                  {% if surat.status == "approved" %}
+                  <a
+                    href="{% url 'print_suketrekkeltani' surat.id %}"
+                    class="btn btn-primary btn-sm rounded-3"
+                    onclick="openPopup(this.href); return false;"
+                  >
+                    <i class="bi bi-printer-fill text-white"></i>
+                  </a>
+                  {% else %}
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm rounded-3"
+                    disabled
+                  >
+                    <i class="bi bi-printer-fill text-white"></i>
+                  </button>
+                  {% endif %} {% elif user.is_superuser %}
+                  <!-- Tombol Setujui -->
+                  <a
+                    href="{% url 'setujui_suketrekeltani' surat.id %}"
+                    class="btn btn-success btn-sm rounded-3"
+                  >
+                    <i class="bi bi-check2-all text-white"></i>
+                  </a>
+
+                  <!-- Tombol Tolak -->
+                  <button
+                    class="btn btn-danger btn-sm rounded-3 bi bi-ban text-white"
+                    data-bs-toggle="modal"
+                    data-bs-target="#tolakModal"
+                    data-id="{{ surat.id }}"
+                  ></button>
+
+                  <!-- Tombol Cetak -->
+                  <a
+                    href="{% url 'print_suketrekkeltani' surat.id %}"
+                    class="btn btn-primary btn-sm rounded-3"
+                    onclick="openPopup(this.href); return false;"
+                  >
+                    <i class="bi bi-printer-fill text-white"></i>
+                  </a>
+                  <!-- Tombol Hapus -->
+                  <a
+                    href="{% url 'delete_suketrekkeltani' surat.id %}"
+                    class="btn btn-danger btn-sm rounded-3"
+                    onclick="return confirm('Hapus data ini?')"
+                  >
+                    <i class="bi bi-trash3-fill text-white"></i>
+                  </a>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+
+  <div
+    class="modal fade"
+    id="formModal"
+    tabindex="-1"
+    aria-labelledby="formModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-0 bg-success bg-opacity-10 rounded-top-4">
+        <h5 class="modal-title fw-semibold text-success" id="formModalLabel">
+          📋 Pendaftaran Besukan Online
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body p-3 p-md-4 bg-white rounded-bottom-4">
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+              {% csrf_token %}
+
+              <!-- DATA PENGUNJUNG -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Nama Lengkap</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputNama"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Email</label>
+                <input
+                  type="email"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">No Telepon</label>
+                <input
+                  type="number"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputNotelp"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Nomor KTP</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputKTP"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Tempat, Tanggal Lahir</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputTTL"
+                  placeholder="Contoh: Jakarta, 01 Januari 1980"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Alamat</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputAlamat"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Nama WBP</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputnamawbp"
+                  placeholder="Contoh: Fulan bin Fulan / Fulan anak dari Fulan"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Hubungan dengan WBP</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputHubungan"
+                  placeholder="Contoh: Ibu, Anak, Kakak, dsb."
+                  required
+                />
+              </div>
+
+              <!-- DATA KUNJUNGAN -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Tanggal Kunjungan</label>
+                <input
+                  type="date"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputTanggal"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Jam Kunjungan</label>
+                <input
+                  type="time"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  name="inputJam"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Jenis Kunjungan</label>
+                <select
+                  class="form-select form-select-lg rounded-3 shadow-sm"
+                  name="inputJenis"
+                  required
+                >
+                  <option value="">-- Pilih Jenis --</option>
+                  <option value="Besukan">Besukan</option>
+                  <option value="Titipan">Titipan</option>
+                </select>
+              </div>
+
+              <!-- JUMLAH PENGIKUT -->
+              <h5 class="fw-semibold mt-4 mb-3 text-success">👥 Jumlah Pengikut</h5>
+
+              <div class="mb-3">
+                <label class="form-label">Laki-laki</label>
+                <input
+                  type="number"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  id="jumlah_laki"
+                  name="pengikut_laki"
+                  min="0"
+                  value="0"
+                />
+                <div id="form_laki"></div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Perempuan</label>
+                <input
+                  type="number"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  id="jumlah_perempuan"
+                  name="pengikut_perempuan"
+                  min="0"
+                  value="0"
+                />
+                <div id="form_perempuan"></div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Anak-anak</label>
+                <input
+                  type="number"
+                  class="form-control form-control-lg rounded-3 shadow-sm"
+                  id="jumlah_anak"
+                  name="pengikut_anak"
+                  min="0"
+                  value="0"
+                />
+                <div id="form_anak"></div>
+              </div>
+
+              <h5 class="fw-semibold mt-4 mb-3 text-success">🍱 Barang Bawaan</h5>
+
+            <div id="barang-bawaan">
+              {% for i in "123456" %}
+              <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                  <input type="text" name="barang_nama_{{ forloop.counter }}" class="form-control" placeholder="Nama makanan" />
+                </div>
+                <div class="col-md-3">
+                  <input type="number" name="barang_jumlah_{{ forloop.counter }}" class="form-control" placeholder="Jumlah" min="0" />
+                </div>
+                <div class="col-md-3">
+                  <input type="text" name="barang_satuan_{{ forloop.counter }}" class="form-control" placeholder="Satuan (pcs, bungkus, dll)" />
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+
+              <!-- SUBMIT -->
+              <div class="d-grid mt-4">
+                <button
+                  type="submit"
+                  class="btn btn-success rounded-pill btn-lg shadow"
+                >
+                  📤 Submit Pendaftaran
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tolak -->
+<div class="modal fade" id="tolakModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" id="formTolak">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tolak Pengajuan</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="catatan_admin" class="form-label"
+              >Alasan Penolakan</label
+            >
+            <textarea
+              class="form-control"
+              name="catatan_admin"
+              id="catatan_admin"
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Batal
+          </button>
+          <button type="submit" class="btn btn-danger">Tolak</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  var tolakModal = document.getElementById("tolakModal");
+  tolakModal.addEventListener("show.bs.modal", function (event) {
+    var button = event.relatedTarget;
+    var id = button.getAttribute("data-id");
+    var form = document.getElementById("formTolak");
+    form.action = `/dashboard/Tolak-Pendaftaran/tolak/${id}/`;
+  });
+</script>
+<script>
+  function generateForms(inputId, containerId, kategori) {
+    const jumlah = document.getElementById(inputId).value;
+    const container = document.getElementById(containerId);
+    container.innerHTML = ""; // reset
+
+    for (let i = 0; i < jumlah; i++) {
+      container.innerHTML += `
+          <div class="row mb-2">
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="pengikut_${kategori}_nama_${i}" placeholder="Nama ${kategori} ke-${
+        i + 1
+      }" required>
+            </div>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="pengikut_${kategori}_nik_${i}" placeholder="NIK ${kategori} ke-${
+        i + 1
+      }">
+            </div>
+          </div>
+        `;
+    }
+  }
+
+  document
+    .getElementById("jumlah_laki")
+    .addEventListener("input", () =>
+      generateForms("jumlah_laki", "form_laki", "laki")
+    );
+  document
+    .getElementById("jumlah_perempuan")
+    .addEventListener("input", () =>
+      generateForms("jumlah_perempuan", "form_perempuan", "perempuan")
+    );
+</script>
+
+<script>
+  function openPopup(url) {
+    window.open(
+      url,
+      "_blank",
+      "width=800,height=600,scrollbars=yes,resizable=yes"
+    );
+  }
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.getElementById("toggleTambahSurat");
+
+    if (toggle) {
+      toggle.addEventListener("change", function () {
+        fetch("{% url 'toggle_tambah_surat' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({ allow: toggle.checked }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              console.log("Status berhasil diubah:", data.allow);
+              // reload halaman supaya tombol ikut berubah
+              location.reload();
+            } else {
+              alert("Gagal mengubah status");
+            }
+          })
+          .catch((err) => console.error("Error:", err));
+      });
+    }
+  });
+</script>
+
+{% endblock konten %}

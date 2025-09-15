@@ -1,0 +1,224 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+
+body {
+  font-family: "Nunito", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #fafafa;
+  height: fit-content;
+}
+.fontimipas {
+  font-family: "Bungee", sans-serif;
+  color: #08315b;
+  text-shadow: 5px 1px 0 rgb(255, 217, 0), -1px 1px 0 rgb(255, 247, 0),
+    10px -5px 0 rgb(255, 225, 0), -1px -1px 0 gold;
+}
+.card-clickable:hover {
+  background-color: rgba(0, 123, 255, 0.1); /* efek hover */
+  transform: translateY(-2px); /* animasi naik sedikit */
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-content {
+  transition: all 0.3s ease-in-out;
+  border-radius: 20px;
+}
+
+.modal-dialog {
+  margin-top: 100px !important; /* Atur sesuai tinggi navbar */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+  font-style: italic;
+}
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin-top: 80px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .modal-dialog {
+    margin-top: 120px !important;
+  }
+}
+
+.form-control:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #4caf50, #43a047);
+  border: none;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #45a049, #388e3c);
+}
+
+textarea.form-control {
+  resize: none;
+}
+.modal-backdrop {
+  z-index: 1050 !important;
+}
+
+.modal {
+  z-index: 1060 !important;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Memastikan lebar penuh */
+  z-index: 1000; /* Supaya navbar berada di atas elemen lain */
+  transition: background-color 0.3s ease; /* Transisi halus untuk perubahan warna */
+}
+
+.navbar.scrolled {
+  background-color: rgb(11, 14, 99) !important;
+}
+
+.jumbtron {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  background: linear-gradient(rgba(0, 15, 115, 0.7), rgba(255, 255, 255, 0.7)),
+    url("../gambar/rutan.png");
+  background-size: cover;
+  background-position: center;
+}
+.jumbotronblog {
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../gambar/rutan.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.logo-kecil {
+  width: 55px;
+  height: auto;
+}
+
+.logo-besar {
+  width: 200px;
+  height: 200px;
+  max-width: 100%;
+}
+
+.bg-custom {
+  background-color: #343a40;
+}
+
+.w-small {
+  font-size: 13px;
+}
+
+.select-container {
+  display: none;
+}
+
+.shadow-green {
+  box-shadow: 0 8px 10px rgba(13, 0, 255, 0.7);
+}
+
+.shadow-black {
+  box-shadow: 0 1rem 3rem rgba(0, 102, 255, 0.175); /* Meniru shadow-lg Bootstrap dengan warna hitam */
+}
+.card-clickable {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.card-clickable:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0.5rem 1.5rem rgb(43, 0, 136);
+}
+
+.kepaldes {
+  width: 28rem;
+  height: auto;
+}
+
+.cr {
+  object-fit: cover;
+  object-position: inherit;
+  height: 300px;
+}
+
+.footer {
+  background-color: #f1f1f1;
+}
+
+.body-content {
+  padding-top: 100px; /* Sesuaikan dengan tinggi navbar */
+}
+main {
+  height: 100%;
+}
+@media (min-width: 576px) {
+  .logo-besar {
+    width: 200px;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-besar {
+    width: 200px;
+  }
+
+  .kepaldes {
+    width: 28rem;
+    height: auto; /* Ukuran untuk layar sedang (>= 768px, seperti tablet) */
+  }
+}
+@media (max-width: 768px) {
+  .shadow-black {
+    box-shadow: 0 0px 00px rgba(255, 255, 255, 0);
+  }
+}
+
+@media (min-width: 992px) {
+  .bg-custom {
+    background-color: transparent;
+  }
+
+  .kepaldes {
+    width: 28rem;
+    height: 25rem;
+  }
+  .pondok {
+    width: 30rem;
+  }
+}
+@media (max-width: 1400px) {
+  .grid-container {
+    display: none; /* Hide grid on tablet and smaller */
+  }
+  .select-container {
+    display: block; /* Show select on tablet and smaller */
+  }
+}
+
+@media (max-width: 1200px) {
+  .pondok {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .clip-irregular {
+    transform: translateY(-100px); /* naik 10px */
+  }
+}

@@ -1,0 +1,514 @@
+{% extends "backend/base_ui.html" %}{% load static %}{% load custom_filters %}{% block konten %}
+<div>
+  <div class="pagetitle">
+    <h1>Pengajuan Ijin Luar Biasa (ILB)</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Pengajuan ILB</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Tombol Tambah -->
+  <div class="mb-3">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahILB">
+      Tambah Pengajuan
+    </button>
+  </div>
+
+  <!-- ==================== MODAL TAMBAH ==================== -->
+  <div class="modal fade" id="modalTambahILB" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content shadow-lg rounded-3 border-0">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title d-flex align-items-center">
+            <i class="bi bi-file-earmark-plus me-2"></i> Form Pengajuan ILB
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body bg-light">
+          <form
+            method="post"
+            enctype="multipart/form-data"
+            action="{% url 'ijinluarbiasa' %}"
+            class="p-3"
+          >
+            {% csrf_token %}
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-person-circle me-1 text-primary"></i> Nama Pengaju
+                </label>
+                <input
+                  type="text"
+                  name="nama_pengaju"
+                  class="form-control shadow-sm"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-card-text me-1 text-primary"></i> KTP Pengaju
+                </label>
+                <input
+                  type="text"
+                  name="ktp_pengaju"
+                  class="form-control shadow-sm"
+                  required
+                />
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-house-door me-1 text-primary"></i> Alamat Pengaju
+                </label>
+                <textarea
+                  name="alamat_pengaju"
+                  class="form-control shadow-sm"
+                  rows="2"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-people-fill me-1 text-primary"></i> Hubungan
+                </label>
+                <input
+                  type="text"
+                  name="hubungan"
+                  class="form-control shadow-sm"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-person-badge me-1 text-primary"></i> Nama WBP
+                </label>
+                <input
+                  type="text"
+                  name="nama_wbp"
+                  class="form-control shadow-sm"
+                  required
+                />
+              </div>
+
+              <!-- Jenis Izin -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-list-check me-1 text-primary"></i> Jenis Izin
+                </label>
+                <select
+                  name="jenis_izin"
+                  id="jenisIzinTambah"
+                  class="form-select shadow-sm"
+                  required
+                >
+                  <option value="">-- Pilih Jenis Izin --</option>
+                  <option value="wali_nikah">Wali Nikah</option>
+                  <option value="sakit">Menjenguk Keluarga Sakit</option>
+                  <option value="meninggal">Melayat</option>
+                  <option value="waris">Pembagian Waris</option>
+                </select>
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-chat-dots me-1 text-primary"></i> Alasan
+                </label>
+                <textarea
+                  name="alasan"
+                  class="form-control shadow-sm"
+                  rows="2"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-calendar-event me-1 text-primary"></i> Tanggal Ijin
+                </label>
+                <input
+                  type="date"
+                  name="tanggal_ijin"
+                  class="form-control shadow-sm"
+                  required
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-hourglass-split me-1 text-primary"></i> Durasi (hari)
+                </label>
+                <input
+                  type="number"
+                  name="durasi"
+                  class="form-control shadow-sm"
+                  required
+                />
+              </div>
+
+              <!-- Dokumen Dinamis -->
+              <div class="row g-3 mt-2" id="dokumenWrapperTambah"></div>
+            </div>
+
+            <div class="text-end mt-4">
+              <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                <i class="bi bi-send-check me-1"></i> Ajukan
+              </button>
+            </div>
+            <i class="text-danger">*Surat Penyataan dapat dodownload pada menu Dokuemen integrasi dan wajib bermatrai</i> 
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ==================== TABEL LIST ILB ==================== -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Daftar Pengajuan ILB</h5>
+      <div class="table-responsive">
+        <table class="table datatable">
+          <thead>
+            <tr>
+              <th>Nama Pengaju</th>
+              <th>Nama WBP</th>
+              <th>Tanggal Ijin</th>
+              <th>Status</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ilb in data_ilb %}
+            <tr>
+              <td><a href="{% url 'detail_ilb' ilb.id %}">{{ ilb.nama_pengaju }}</a></td>
+              <td>{{ ilb.nama_wbp }}</td>
+              <td>{{ ilb.tanggal_ijin }}</td>
+              <td>
+                {% if ilb.status == "review" %}
+                  <span class="text-warning fw-bold">Proses Review</span>
+                {% elif ilb.status == "disetujui" %}
+                  <span class="text-success fw-bold">Disetujui</span>
+                {% elif ilb.status == "ditolak" %}
+                  <span class="text-danger fw-bold">Ditolak</span>
+                  {% if ilb.catatan_admin %}
+                    <br />
+                    <small class="text-muted d-block" style="word-break: break-word; max-width: 250px">
+                      Alasan: {{ ilb.catatan_admin }}
+                    </small>
+                  {% endif %}
+                {% endif %}
+              </td>
+              <td class="text-center">
+                <div class="btn-group gap-3" role="group">
+                  {% if not user.is_superuser %}
+                  <!-- Tombol Edit -->
+                  <button type="button" class="btn btn-warning btn-sm rounded-3">
+                    <a data-bs-toggle="modal" data-bs-target="#modalEditILB{{ ilb.id }}"
+                       class="text-decoration-none text-white bi bi-pencil-square"></a>
+                  </button>
+
+                  <!-- Tombol Hapus -->
+                  <button type="button" class="btn btn-danger btn-sm rounded-3">
+                    <a href="{% url 'delete_ilb' ilb.id %}"
+                       onclick="return confirm('Hapus data ini?')"
+                       class="text-decoration-none text-white bi bi-trash3-fill"></a>
+                  </button>
+
+                  <!-- Tombol Cetak -->
+                  {% if ilb.status == "disetujui" %}
+                    <button type="button" class="btn btn-primary btn-sm rounded-3">
+                      <a href="{% url 'print_ilb' ilb.id %}"
+                         onclick="openPopup(this.href); return false;"
+                         class="text-decoration-none text-white bi bi-printer-fill"></a>
+                    </button>
+                  {% else %}
+                    <button type="button" class="btn btn-primary btn-sm rounded-3" disabled>
+                      <span class="text-white bi bi-printer-fill"></span>
+                    </button>
+                  {% endif %}
+                  {% elif user.is_superuser %}
+                  <!-- Tombol Setujui -->
+                  <button type="button" class="btn btn-success btn-sm rounded-3">
+                    <a href="{% url 'setujui_ilb' ilb.id %}"
+                       class="text-decoration-none text-white bi bi-check2-all"></a>
+                  </button>
+
+                  <!-- Tombol Tolak -->
+                  <button type="button" class="btn btn-danger bi bi-ban btn-sm rounded-3"
+                          data-bs-toggle="modal" data-bs-target="#tolakModal" data-id="{{ ilb.id }}"></button>
+
+                  <!-- Tombol Cetak -->
+                  <button type="button" class="btn btn-primary btn-sm rounded-3">
+                    <a href="{% url 'print_ilb' ilb.id %}"
+                       onclick="openPopup(this.href); return false;"
+                       class="text-decoration-none text-white bi bi-printer-fill"></a>
+                  </button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+
+            <!-- ==================== MODAL EDIT ==================== -->
+            <div class="modal fade" id="modalEditILB{{ ilb.id }}" tabindex="-1">
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Edit Pengajuan ILB</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'edit_ilb' ilb.id %}">
+                      {% csrf_token %}
+
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label">Nama Pengaju</label>
+                          <input type="text" name="nama_pengaju" class="form-control" value="{{ ilb.nama_pengaju }}" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">KTP Pengaju</label>
+                          <input type="text" name="ktp_pengaju" class="form-control" value="{{ ilb.ktp_pengaju }}" required />
+                        </div>
+                        <div class="col-md-12">
+                          <label class="form-label">Alamat Pengaju</label>
+                          <textarea name="alamat_pengaju" class="form-control" required>{{ ilb.alamat_pengaju }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Hubungan</label>
+                          <input type="text" name="hubungan" class="form-control" value="{{ ilb.hubungan }}" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Nama WBP</label>
+                          <input type="text" name="nama_wbp" class="form-control" value="{{ ilb.nama_wbp }}" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Register WBP</label>
+                          <input type="text" name="register_wbp" class="form-control" value="{{ ilb.register_wbp }}" required />
+                        </div>
+                        <div class="col-md-12">
+                          <label class="form-label">Alasan</label>
+                          <textarea name="alasan" class="form-control" required>{{ ilb.alasan }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Tanggal Ijin</label>
+                          <input type="date" name="tanggal_ijin" class="form-control" value="{{ ilb.tanggal_ijin|date:'Y-m-d' }}" required />
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Durasi (hari)</label>
+                          <input type="number" name="durasi" class="form-control" value="{{ ilb.durasi }}" required />
+                        </div>
+
+                        <!-- Jenis izin pada edit -->
+                        <div class="col-md-6">
+                          <label class="form-label">Jenis Izin</label>
+                          <select name="jenis_izin" id="jenisIzinEdit{{ ilb.id }}" class="form-control" required>
+                            <option value="menikah" {% if ilb.jenis_izin == "menikah" %}selected{% endif %}>Menikah</option>
+                            <option value="wali_nikah" {% if ilb.jenis_izin == "wali_nikah" %}selected{% endif %}>Wali Nikah</option>
+                            <option value="sakit" {% if ilb.jenis_izin == "sakit" %}selected{% endif %}>Menjenguk Keluarga Sakit</option>
+                            <option value="meninggal" {% if ilb.jenis_izin == "meninggal" %}selected{% endif %}>Meninggal</option>
+                            <option value="waris" {% if ilb.jenis_izin == "waris" %}selected{% endif %}>Pembagian Waris</option>
+                          </select>
+                        </div>
+
+                        <!-- Dokumen dinamis edit -->
+                        <div class="row g-3 mt-2" id="dokumenWrapperEdit{{ ilb.id }}"></div>
+                      </div>
+
+                      <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tolak ILB -->
+<div class="modal fade" id="tolakModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" id="formTolakIlb" action="">
+
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tolak Pengajuan ILB</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Anda akan menolak pengajuan <strong id="modalIlbNama"></strong>.</p>
+          <div class="mb-3">
+            <label class="form-label">Pesan Penolakan</label>
+            <textarea name="pesan_penolakan" class="form-control" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Tolak</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  const tolakModal = document.getElementById('tolakModal');
+  tolakModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const ilbId = button.getAttribute('data-id');
+    const form = document.getElementById('formTolakIlb');
+    form.action = "{% url 'tolak_ilb' 0 %}".replace("0", ilbId);
+
+    // opsional: tampilkan nama pengaju di modal
+    const row = button.closest("tr");
+    const namaPengaju = row.querySelector("td a").innerText;
+    document.getElementById("modalIlbNama").innerText = namaPengaju;
+  });
+</script>
+
+
+
+<script>
+  // ================== Dokumen Dinamis Tambah ==================
+  const dokumenOptions = {
+    menikah: `
+      <div class="col-md-4"><label class="form-label">Upload KTP & KK</label><input type="file" name="dokumen_ktp_kk" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Pernyataan</label><input type="file" name="dokumen_pernyataan" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Keterangan Desa</label><input type="file" name="dokumen_keterangan_desa" class="form-control" required /></div>
+    `,
+    wali_nikah: `
+      <div class="col-md-4"><label class="form-label">Upload KTP & KK</label><input type="file" name="dokumen_ktp_kk" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Pernyataan</label><input type="file" name="dokumen_pernyataan" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Keterangan Desa</label><input type="file" name="dokumen_keterangan_desa" class="form-control" required /></div>
+    `,
+    sakit: `
+      <div class="col-md-4"><label class="form-label">Upload KTP & KK</label><input type="file" name="dokumen_ktp_kk" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Pernyataan</label><input type="file" name="dokumen_pernyataan" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Keterangan Sakit</label><input type="file" name="dokumen_sakit" class="form-control" required /></div>
+    `,
+    meninggal: `
+      <div class="col-md-4"><label class="form-label">Upload KTP & KK</label><input type="file" name="dokumen_ktp_kk" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Pernyataan</label><input type="file" name="dokumen_pernyataan" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Keterangan Kematian (RT)</label><input type="file" name="dokumen_kematian_rt" class="form-control" required /></div>
+    `,
+    waris: `
+      <div class="col-md-4"><label class="form-label">Upload KTP & KK</label><input type="file" name="dokumen_ktp_kk" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Pernyataan</label><input type="file" name="dokumen_pernyataan" class="form-control" required /></div>
+      <div class="col-md-4"><label class="form-label">Upload Surat Keterangan Waris</label><input type="file" name="dokumen_waris" class="form-control" required /></div>
+    `
+  };
+
+  const jenisTambah = document.getElementById("jenisIzinTambah");
+  const wrapTambah = document.getElementById("dokumenWrapperTambah");
+  jenisTambah.addEventListener("change", function() {
+    wrapTambah.innerHTML = dokumenOptions[this.value] || "";
+  });
+
+
+  // ================== Dokumen Dinamis Edit ==================
+  {% for ilb in data_ilb %}
+  const dokumenOptionsEdit{{ ilb.id }} = {
+    menikah: `
+      <div class="col-md-4">
+        <label class="form-label">KTP & KK</label>
+        {% if ilb.dokumen_ktp_kk %}<p><a href="{{ ilb.dokumen_ktp_kk.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_ktp_kk" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Surat Pernyataan</label>
+        {% if ilb.dokumen_pernyataan %}<p><a href="{{ ilb.dokumen_pernyataan.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_pernyataan" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Surat Keterangan Desa</label>
+        {% if ilb.dokumen_keterangan_desa %}<p><a href="{{ ilb.dokumen_keterangan_desa.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_keterangan_desa" class="form-control" />
+      </div>
+    `,
+    sakit: `
+      <div class="col-md-6">
+        <label class="form-label">KTP & KK</label>
+        {% if ilb.dokumen_ktp_kk %}<p><a href="{{ ilb.dokumen_ktp_kk.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_ktp_kk" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Surat Pernyataan</label>
+        {% if ilb.dokumen_pernyataan %}<p><a href="{{ ilb.dokumen_pernyataan.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_pernyataan" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Surat Keterangan Sakit</label>
+        {% if ilb.dokumen_sakit %}<p><a href="{{ ilb.dokumen_sakit.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_sakit" class="form-control" />
+      </div>
+    `,
+    meninggal: `
+      <div class="col-md-6">
+        <label class="form-label">KTP & KK</label>
+        {% if ilb.dokumen_ktp_kk %}<p><a href="{{ ilb.dokumen_ktp_kk.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_ktp_kk" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Surat Pernyataan</label>
+        {% if ilb.dokumen_pernyataan %}<p><a href="{{ ilb.dokumen_pernyataan.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_pernyataan" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Surat Keterangan Kematian (RT)</label>
+        {% if ilb.dokumen_kematian_rt %}<p><a href="{{ ilb.dokumen_kematian_rt.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_kematian_rt" class="form-control" />
+      </div>
+    `,
+    waris: `
+      <div class="col-md-6">
+        <label class="form-label">KTP & KK</label>
+        {% if ilb.dokumen_ktp_kk %}<p><a href="{{ ilb.dokumen_ktp_kk.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_ktp_kk" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Surat Pernyataan</label>
+        {% if ilb.dokumen_pernyataan %}<p><a href="{{ ilb.dokumen_pernyataan.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_pernyataan" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Surat Keterangan Waris</label>
+        {% if ilb.dokumen_waris %}<p><a href="{{ ilb.dokumen_waris.url }}" target="_blank">Lihat File Lama</a></p>{% endif %}
+        <input type="file" name="dokumen_waris" class="form-control" />
+      </div>
+    `
+  };
+
+  const jenisEdit{{ ilb.id }} = document.getElementById("jenisIzinEdit{{ ilb.id }}");
+  const wrapEdit{{ ilb.id }} = document.getElementById("dokumenWrapperEdit{{ ilb.id }}");
+
+  function updateDokumenEdit{{ ilb.id }}() {
+    wrapEdit{{ ilb.id }}.innerHTML = dokumenOptionsEdit{{ ilb.id }}[jenisEdit{{ ilb.id }}.value] || "";
+  }
+
+  if (jenisEdit{{ ilb.id }}) {
+    updateDokumenEdit{{ ilb.id }}();
+    jenisEdit{{ ilb.id }}.addEventListener("change", updateDokumenEdit{{ ilb.id }});
+  }
+  {% endfor %}
+</script>
+
+
+
+
+{% endblock konten %}

@@ -1,0 +1,59 @@
+{% extends "backend/base_ui.html" %} {% load custom_filters %} {% block konten%}
+
+<div class="pagetitle">
+  <h1>Arsip Pengaduan Asing</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'pengaduan_asing' %}">Pengaduan Asing</a>
+      </li>
+      <li class="breadcrumb-item active">Arsip</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Data Arsip Pengaduan Asing</h5>
+
+          <p><strong>Total arsip:</strong> {{ aduans|length }}</p>
+
+          <div class="table-responsive">
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Email</th>
+                  <th>Telepon</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for aduan in arsips %}
+                <tr>
+                  <td>
+                    <a href="{% url 'detail_arsip_pengaduan_asing' aduan.id %}">
+                      {{ aduan.name }}
+                    </a>
+                  </td>
+                  <td>{{ aduan.email }}</td>
+                  <td>{{ aduan.phone }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="4" class="text-center">Tidak ada data arsip.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

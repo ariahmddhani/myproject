@@ -1,0 +1,204 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% block konten %}
+<div>
+  <div class="pagetitle">
+    <h1>Dokumen Integrasi</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Dokumen Integrasi</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Tombol Tambah -->
+  <div class="mb-3">
+    {% if user.is_superuser %}
+    <button
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#modalTambahDokumen"
+    >
+      Tambah Dokumen
+    </button>
+    {% endif %}
+  </div>
+
+  <!-- ==================== MODAL TAMBAH ==================== -->
+  <div class="modal fade" id="modalTambahDokumen" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Form Tambah Dokumen Integrasi</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            method="post"
+            enctype="multipart/form-data"
+            action="{% url 'dokumen_integrasi' %}"
+          >
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label class="form-label">Judul Dokumen (*)</label>
+                <input type="text" name="judul" class="form-control" required />
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Deskripsi Dokumen</label>
+                <textarea
+                  name="deskripsi"
+                  class="form-control ckeditor"
+                ></textarea>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Upload Dokumen (*)</label>
+                <input type="file" name="file" class="form-control" required />
+              </div>
+            </div>
+            <div class="text-end mt-3">
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TABEL LIST ==================== -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Daftar Dokumen Integrasi</h5>
+      <div class="table-responsive">
+        <table class="table datatable">
+          <thead>
+            <tr>
+              <th>Judul</th>
+              <th>Deskripsi</th>
+              <th>File</th>
+              <th>Tanggal Upload</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dok in dokumen_list %}
+            <tr>
+              <td>{{ dok.judul }}</td>
+              <td>
+                <a href="{% url 'detail_dokumen_integrasi' dok.id %}">
+                  {{ dok.deskripsi|safe|truncatewords:20 }}
+                </a>
+              </td>
+              <td>
+                <a href="{{ dok.file.url }}" class="btn btn-sm btn-info">
+                  DOWNLOAD
+                </a>
+              </td>
+              <td>{{ dok.tanggal_upload|date:"d-m-Y H:i" }}</td>
+              <td class="text-center">
+                <div class="btn-group gap-2">
+                  {% if user.is_superuser %}
+                  <!-- Edit (Modal) -->
+                  <button
+                    class="btn btn-warning btn-sm bi bi-pencil-square text-white"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEditDokumen{{ dok.id }}"
+                  ></button>
+                  <!-- Hapus -->
+                  <a
+                    href="{% url 'delete_dokumen_integrasi' dok.id %}"
+                    onclick="return confirm('Hapus dokumen ini?')"
+                    class="btn btn-danger btn-sm bi bi-trash3-fill text-white"
+                  ></a>
+                  {% else %}
+                  <span class="badge bg-success">Tersedia</span>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+
+            <!-- ==================== MODAL EDIT ==================== -->
+            <div
+              class="modal fade"
+              id="modalEditDokumen{{ dok.id }}"
+              tabindex="-1"
+            >
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header bg-warning">
+                    <h5 class="modal-title text-white">
+                      Edit Dokumen Integrasi
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form
+                      method="post"
+                      enctype="multipart/form-data"
+                      action="{% url 'edit_dokumen_integrasi' dok.id %}"
+                    >
+                      {% csrf_token %}
+                      <div class="row g-3">
+                        <div class="col-md-12">
+                          <label class="form-label">Judul Dokumen (*)</label>
+                          <input
+                            type="text"
+                            name="judul"
+                            class="form-control"
+                            value="{{ dok.judul }}"
+                            required
+                          />
+                        </div>
+                        <div class="col-md-12">
+                          <label class="form-label">Deskripsi Dokumen</label>
+                          <textarea
+                            name="deskripsi"
+                            class="form-control ckeditor"
+                          >
+{{ dok.deskripsi }}</textarea
+                          >
+                        </div>
+                        <div class="col-md-12">
+                          <label class="form-label">Upload Dokumen</label>
+                          <input type="file" name="file" class="form-control" />
+                          <p class="small mt-2">
+                            File saat ini:
+                            <a href="{{ dok.file.url }}" target="_blank"
+                              >{{ dok.file.name }}</a
+                            >
+                          </p>
+                        </div>
+                      </div>
+                      <div class="text-end mt-3">
+                        <button
+                          type="submit"
+                          class="btn btn-warning text-white"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+{% endblock konten %}

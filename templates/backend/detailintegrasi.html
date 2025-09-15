@@ -1,0 +1,39 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% block konten %}
+<div class="pagetitle">
+  <h1>Detail Dokumen Integrasi</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'dokumen_integrasi' %}">Dokumen Integrasi</a>
+      </li>
+      <li class="breadcrumb-item active">{{ dokumen.judul }}</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="section">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{ dokumen.judul }}</h5>
+
+      {% if dokumen.deskripsi %}
+      <p>{{ dokumen.deskripsi|safe }}</p>
+      {% else %}
+      <p><em>Tidak ada deskripsi.</em></p>
+      {% endif %}
+
+      <p>
+        <strong>File:</strong>
+        <a class="btn btn-primary btn-sm" href="{{ dokumen.file.url }}" download
+          >Download</a
+        >
+      </p>
+
+      <a href="{% url 'dokumen_integrasi' %}" class="btn btn-secondary"
+        >Kembali</a
+      >
+    </div>
+  </div>
+</section>
+{% endblock %}

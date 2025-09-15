@@ -1,0 +1,7 @@
+
+pip install pymsql
+pip install livereload
+pip install django-livereload-server
+pip install xhtml2pdf
+pip install django-compressor
+pip install "django<5.0"

@@ -1,0 +1,193 @@
+pertama :
+"  
+class SuketRekKelTani(models.Model):
+    penulis = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    nama = models.CharField(max_length=255)
+    jabatan = models.CharField(max_length=255)
+    sekretariat = models.CharField(max_length=255)
+    tempat = models.CharField(max_length=255)
+    bantuan = models.CharField(max_length=255)
+    tujuan = models.CharField(max_length=255)
+    date = models.DateTimeField(default=timezone.now, blank=True)
+    status = models.BooleanField(null=True, blank=True)
+    
+    def __str__(self):
+        return "{} - {}".format(self.penulis)
+"
+"
+class AdSuketRekKelTani(admin.ModelAdmin):
+   
+admin.site.register(SuketRekKelTani, AdSuketRekKelTani)"
+
+tolong buatkan list display yang berurutan dengan models yang ku bikin
+
+kedua :
+"
+def sukettidakmampu(request):
+    template_name = "backend/sukettidakmampu.html"
+    
+    suket = SuketTidakMampu.objects.all()
+    
+    if request.method == "POST":
+       
+        SuketTidakMampu.objects.create(
+            penulis=request.user,
+            nama=request.POST.get("inputNama"),
+            jenis_kelamin=request.POST.get("inputjk"),
+            ttl=request.POST.get("inputTtl"),
+            suku=request.POST.get("inputSuku"),
+            agama=request.POST.get("inputAgama"),
+            nik=request.POST.get("inputNIK"),
+            alamat=request.POST.get("inputAlamat"),
+            pekerjaan= request.POST.get("inputPekerjaan")
+        )
+    
+        return redirect('sukettidakmampu')
+    
+    context={
+        "suket":suket
+    }
+    
+    return render(request, template_name, context)
+
+def edit_sukettidakmampu(request,id):
+    template_name = "backend/sukettidakmampu.html"
+    
+    suket_id = SuketTidakMampu.objects.get(id=id)
+    
+    if request.method == "POST":
+        penulis=request.user
+        nama=request.POST.get("inputNama")
+        jenis_kelamin=request.POST.get("inputjk")
+        ttl=request.POST.get("inputTtl")
+        suku=request.POST.get("inputSuku")
+        agama=request.POST.get("inputAgama")
+        nik=request.POST.get("inputNIK")
+        alamat=request.POST.get("inputAlamat")
+        pekerjaan= request.POST.get("inputPekerjaan")
+        
+        suket_id.penulis=penulis
+        suket_id.nama=nama
+        suket_id.jenis_kelamin=jenis_kelamin
+        suket_id.ttl=ttl
+        suket_id.suku=suku
+        suket_id.agama=agama
+        suket_id.nik=nik
+        suket_id.alamat=alamat
+        suket_id.date=timezone.now()
+        suket_id.pekerjaan= pekerjaan
+        
+        suket_id.save()
+        
+        return redirect('sukettidakmampu')
+    
+    context = {
+        "value" : suket_id
+    }
+    
+    
+    return render(request, template_name, context)
+
+def delete_sukettidakmampu(request,id):
+    SuketTidakMampu.objects.get(id=id).delete()
+    
+    return redirect('sukettidakmampu')"
+
+di atas adalah bagian views dari suket tidak mampu, tolong buatkan yang serupa namun sesuaikan dengan models yang lampirkan sebelumnya mengenai suket Rekomendasi Kelompok Tani, untuk nama def-nya di ubah kurang lebih saja yaitu suketrekkeltani, edit_suketrekkeltani dan delete_suketrekkeltani
+
+kedua v2:
+"
+def skck(request):
+    template_name = "backend/skck.html"
+    
+    suket = SKCK.objects.all()
+    
+    if request.method == "POST":
+       
+        myfile = request.FILES.get("gambar")
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        url = fs.url(filename)
+        gambar = url
+        
+        SKCK.objects.create(
+            penulis=request.user,
+            nama=request.POST.get("inputNama"),
+            jenis_kelamin=request.POST.get("inputjk"),
+            ttl=request.POST.get("inputTtl"),
+            suku=request.POST.get("inputSuku"),
+            agama=request.POST.get("inputAgama"),
+            nik=request.POST.get("inputNIK"),
+            alamat=request.POST.get("inputAlamat"),
+            pekerjaan= request.POST.get("inputPekerjaan"),
+            kawin = request.POST.get("inputKawin"),
+            pendidikanterakhir = request.POST.get("inputPendidikanterakhir"),
+            scanktp = gambar,
+        )
+    
+        return redirect('skck')
+    
+    context={
+        "suket":suket
+    }
+    
+    return render(request, template_name, context)
+
+def edit_skck(request,id):
+    template_name = "backend/skck.html"
+    
+    suket_id = SKCK.objects.get(id=id)
+    
+    if request.method == "POST":
+        penulis=request.user
+        nama=request.POST.get("inputNama")
+        jenis_kelamin=request.POST.get("inputjk")
+        ttl=request.POST.get("inputTtl")
+        suku=request.POST.get("inputSuku")
+        agama=request.POST.get("inputAgama")
+        nik=request.POST.get("inputNIK")
+        alamat=request.POST.get("inputAlamat")
+        pekerjaan= request.POST.get("inputPekerjaan")
+        kawin = request.POST.get("inputKawin")
+        pendidikanterakhir = request.POST.get("inputPendidikanterakhir")
+        # Mengecek apakah ada file baru yang di-upload
+        myfile = request.FILES.get("gambar")
+        
+        if myfile:
+            # Jika ada file baru yang di-upload, simpan file baru
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            url = fs.url(filename)
+            suket_id.scanktp = url  # Mengupdate hanya jika ada file baru
+        
+        suket_id.penulis=penulis
+        suket_id.nama=nama
+        suket_id.jenis_kelamin=jenis_kelamin
+        suket_id.ttl=ttl
+        suket_id.suku=suku
+        suket_id.agama=agama
+        suket_id.nik=nik
+        suket_id.alamat=alamat
+        suket_id.date=timezone.now()
+        suket_id.pekerjaan= pekerjaan
+        suket_id.kawin= kawin
+        suket_id.pendidikanterakhir= pendidikanterakhir
+       
+        
+        suket_id.save()
+        
+        return redirect('skck')
+    
+    context = {
+        "value" : suket_id
+    }
+    
+    
+    return render(request, template_name, context)
+
+def delete_skck(request,id):
+    SKCK.objects.get(id=id).delete()
+    
+    return redirect('skck')"
+
+di atas adalah bagian views dari skck, tolong buatkan yang serupa namun sesuaikan dengan models yang lampirkan sebelumnya mengenai suket penghasilan tidak tetap, untuk nama def-nya di ubah kurang lebih saja yaitu suketpenghasilantidaktetap, edit_suketpenghasilantidaktetap dan delete_suketpenghasilantidaktetap

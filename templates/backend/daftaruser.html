@@ -1,0 +1,92 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div class="pagetitle">
+  <h1>Daftar Users</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item">Users</li>
+    </ol>
+  </nav>
+</div>
+<!-- End Page Title -->
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <!-- Table with stripped rows -->
+          <div class="table-responsive">
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for users in profile %}
+                <tr>
+                  <td>
+                    <a href="{% url 'detail_user' users.user.id %}"
+                      >{{ users.user.username }}</a
+                    >
+                  </td>
+                  <td>
+                    {{ users.user.first_name }} {{ users.user.last_name }}
+                  </td>
+
+                  <td>{{ users.user.email }}</td>
+                  {% if users.user.is_superuser %}
+                  <td class="text-warning fw-bold">Admin</td>
+                  {% else %}
+                  <td class="text-success fw-bold">Warga</td>
+                  {% endif %}
+                  <td class="text-center">
+                    <!-- Btn-group untuk aksi -->
+                    <div
+                      class="btn-group gap-3"
+                      role="group"
+                      aria-label="Action buttons"
+                    >
+                      <a
+                        href="{% url 'edit_user' users.user.id %}"
+                        class="text-decoration-none"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-warning btn-sm rounded-3"
+                        >
+                          Edit
+                        </button>
+                      </a>
+                      <a
+                        href="{% url 'hapus_user' users.user.id %}"
+                        class="text-decoration-none"
+                      >
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm rounded-3"
+                        >
+                          Delete
+                        </button>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- End Table with stripped rows -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock konten %}

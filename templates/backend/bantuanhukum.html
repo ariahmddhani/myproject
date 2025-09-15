@@ -1,0 +1,495 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% block konten %}
+<div>
+  <div class="pagetitle">
+    <h1>Pengajuan Bantuan Hukum</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'dashboard' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Bantuan Hukum</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Tombol Tambah -->
+  <div class="mb-3">
+    <button
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#modalTambahBantuan"
+    >
+      Tambah Pengajuan
+    </button>
+  </div>
+
+  <!-- ==================== MODAL TAMBAH ==================== -->
+  <!-- ==================== MODAL TAMBAH ==================== -->
+<div class="modal fade" id="modalTambahBantuan" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="bi bi-file-earmark-plus"></i> Form Pengajuan Bantuan Hukum</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" action="{% url 'bantuan_hukum' %}">
+          {% csrf_token %}
+          <div class="row g-3">
+
+            <!-- ==================== Data Pengaju ==================== -->
+            <h6 class="fw-bold mt-3"><i class="bi bi-person-badge"></i> Data Penjamin</h6>
+            <div class="col-md-6">
+              <label class="form-label">Nama Penjamin (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                <input type="text" name="nama_pengaju" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">KTP Penjamin (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
+                <input type="text" name="ktp_pengaju" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Alamat Penjamin (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                <textarea name="alamat_pengaju" class="form-control" required></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hubungan dengan WBP (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-people-fill"></i></span>
+                <input type="text" name="hubungan" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nomor HP (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                <input type="text" name="no_hp" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Pekerjaan Penjamin (opsional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-briefcase-fill"></i></span>
+                <input type="text" name="pekerjaan_pengaju" class="form-control" />
+              </div>
+            </div>
+
+            <!-- ==================== Data WBP ==================== -->
+            <h6 class="fw-bold mt-4"><i class="bi bi-person-square"></i> Data WBP</h6>
+            <div class="col-md-6">
+              <label class="form-label">Nama WBP (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person-fill-lock"></i></span>
+                <input type="text" name="nama_wbp" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Pasal (opsional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-journal-text"></i></span>
+                <input type="text" name="pasal" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Lama Hukuman (opsional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-hourglass-split"></i></span>
+                <input type="text" name="lama_hukuman" class="form-control" />
+              </div>
+            </div>
+
+            <!-- ==================== Permasalahan ==================== -->
+            <h6 class="fw-bold mt-4"><i class="bi bi-exclamation-triangle-fill"></i> Permasalahan</h6>
+            <div class="col-md-6">
+              <label class="form-label">Kategori Permasalahan (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-tags-fill"></i></span>
+                <select name="kategori_permasalahan" class="form-select" required>
+                  <option value="">-- Pilih --</option>
+                  <option value="pidana">Pidana</option>
+                  <option value="perdata">Perdata</option>
+                  <option value="narkotika">Narkotika</option>
+                  <option value="korupsi">Korupsi</option>
+                  <option value="lainnya">Lainnya</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Kronologi Kasus (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-file-text-fill"></i></span>
+                <textarea name="kronologi" class="form-control" required></textarea>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Jenis Bantuan yang Diminta (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-life-preserver"></i></span>
+                <input type="text" name="jenis_bantuan" class="form-control" required />
+              </div>
+            </div>
+
+            <!-- ==================== Dokumen ==================== -->
+            <h6 class="fw-bold mt-4"><i class="bi bi-folder2-open"></i> Dokumen Persyaratan</h6>
+            <div class="col-md-6">
+              <label class="form-label">Upload KTP & KK (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                <input type="file" name="dokumen_ktp_kk" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Upload SKTM (*)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                <input type="file" name="dokumen_sktm" class="form-control" required />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Upload Dokumen Lainnya (opsional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-upload"></i></span>
+                <input type="file" name="dokumen_lainnya" class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-send-check"></i> Ajukan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- ==================== TABEL LIST ==================== -->
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Daftar Pengajuan Bantuan Hukum</h5>
+      <div class="table-responsive">
+        <table class="table datatable">
+          <thead>
+            <tr>
+              <th>Nama Pengaju</th>
+              <th>Nama WBP</th>
+              <th>Kategori</th>
+              <th>Tanggal Pengajuan</th>
+              <th>Status</th>
+              <th class="text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for bh in data_bh %}
+            <tr>
+              <td>
+                <a href="{% url 'detail_bantuan_hukum' bh.id %}">
+                  {{ bh.nama_pengaju }}
+                </a>
+              </td>
+              <td>{{ bh.nama_wbp }}</td>
+              <td>{{ bh.get_kategori_permasalahan_display }}</td>
+              <td>{{ bh.tanggal_pengajuan|date:"d-m-Y" }}</td>
+              <td>
+                {% if bh.status == "pending" %}
+                <span class="text-warning fw-bold">Menunggu</span>
+                {% elif bh.status == "approved" %}
+                <span class="text-success fw-bold">Disetujui</span>
+                {% elif bh.status == "rejected" %}
+                <span class="text-danger fw-bold">Ditolak</span>
+                {% if bh.catatan_admin %}
+                <br /><small class="text-muted"
+                  >Alasan: {{ bh.catatan_admin }}</small
+                >
+                {% endif %} {% endif %}
+              </td>
+              <td class="text-center">
+                <div class="btn-group gap-2">
+                  {% if not user.is_superuser %}
+                  <!-- Edit -->
+                  <!-- Tombol Edit -->
+                  <button
+                    class="btn btn-warning btn-sm text-white bi bi-pencil-square"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEditBantuan{{ bh.id }}"
+                  ></button>
+                  <!-- ==================== MODAL EDIT ==================== -->
+                 <div class="modal fade" id="modalEditBantuan{{ bh.id }}" tabindex="-1">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Edit Pengajuan Bantuan Hukum</h5>
+                        <button
+                          type="button"
+                          class="btn-close btn-close-white"
+                          data-bs-dismiss="modal"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <form
+                          method="post"
+                          enctype="multipart/form-data"
+                          action="{% url 'edit_bantuan_hukum' bh.id %}"
+                        >
+                          {% csrf_token %}
+                          <div class="row g-3">
+                            <!-- Data Pengaju -->
+                            <h6 class="fw-bold text-primary mt-3">Data Penjamin</h6>
+                            <div class="col-md-6">
+                              <label class="form-label">Nama Penjamin <span class="text-danger">*</span></label>
+                              <input
+                                type="text"
+                                name="nama_pengaju"
+                                value="{{ bh.nama_pengaju }}"
+                                class="form-control"
+                                required
+                              />
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">NO. KTP Penjamin <span class="text-danger">*</span></label>
+                              <input
+                                type="text"
+                                name="ktp_pengaju"
+                                value="{{ bh.ktp_pengaju }}"
+                                class="form-control"
+                                required
+                              />
+                            </div>
+                            <div class="col-md-12">
+                              <label class="form-label">Alamat Penjamin <span class="text-danger">*</span></label>
+                              <textarea
+                                name="alamat_pengaju"
+                                class="form-control"
+                                rows="2"
+                                required
+                              >{{ bh.alamat_pengaju }}</textarea>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Hubungan dengan WBP <span class="text-danger">*</span></label>
+                              <input
+                                type="text"
+                                name="hubungan"
+                                value="{{ bh.hubungan }}"
+                                class="form-control"
+                                required
+                              />
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Nomor HP <span class="text-danger">*</span></label>
+                              <input
+                                type="text"
+                                name="no_hp"
+                                value="{{ bh.no_hp }}"
+                                class="form-control"
+                                required
+                              />
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Pekerjaan Penjamin (opsional)</label>
+                              <input
+                                type="text"
+                                name="pekerjaan_pengaju"
+                                value="{{ bh.pekerjaan_pengaju }}"
+                                class="form-control"
+                              />
+                            </div>
+
+                            <!-- Data WBP -->
+                            <h6 class="fw-bold text-primary mt-4">Data WBP</h6>
+                            <div class="col-md-6">
+                              <label class="form-label">Nama WBP <span class="text-danger">*</span></label>
+                              <input
+                                type="text"
+                                name="nama_wbp"
+                                value="{{ bh.nama_wbp }}"
+                                class="form-control"
+                                required
+                              />
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Pasal (opsional)</label>
+                              <input
+                                type="text"
+                                name="pasal"
+                                value="{{ bh.pasal }}"
+                                class="form-control"
+                              />
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Lama Hukuman (opsional)</label>
+                              <input
+                                type="text"
+                                name="lama_hukuman"
+                                value="{{ bh.lama_hukuman }}"
+                                class="form-control"
+                              />
+                            </div>
+
+                            <!-- Permasalahan -->
+                            <h6 class="fw-bold text-primary mt-4">Permasalahan</h6>
+                            <div class="col-md-6">
+                              <label class="form-label">Kategori Permasalahan <span class="text-danger">*</span></label>
+                              <select
+                                name="kategori_permasalahan"
+                                class="form-select"
+                                required
+                              >
+                                <option value="">-- Pilih --</option>
+                                <option value="pidana" {% if bh.kategori_permasalahan == "pidana" %}selected{% endif %}>Pidana</option>
+                                <option value="perdata" {% if bh.kategori_permasalahan == "perdata" %}selected{% endif %}>Perdata</option>
+                                <option value="narkotika" {% if bh.kategori_permasalahan == "narkotika" %}selected{% endif %}>Narkotika</option>
+                                <option value="korupsi" {% if bh.kategori_permasalahan == "korupsi" %}selected{% endif %}>Korupsi</option>
+                                <option value="lainnya" {% if bh.kategori_permasalahan == "lainnya" %}selected{% endif %}>Lainnya</option>
+                              </select>
+                            </div>
+                            <div class="col-md-12">
+                              <label class="form-label">Kronologi Kasus <span class="text-danger">*</span></label>
+                              <textarea
+                                name="kronologi"
+                                class="form-control"
+                                rows="3"
+                                required
+                              >{{ bh.kronologi }}</textarea>
+                            </div>
+                            <div class="col-md-12">
+                              <label class="form-label">Jenis Bantuan yang Diminta <span class="text-danger">*</span></label>
+                              <input
+                                type="text"
+                                name="jenis_bantuan"
+                                value="{{ bh.jenis_bantuan }}"
+                                class="form-control"
+                                required
+                              />
+                            </div>
+
+                            <!-- Dokumen -->
+                            <h6 class="fw-bold text-primary mt-4">Dokumen</h6>
+                            <div class="col-md-6">
+                              <label class="form-label">Upload KTP & KK <span class="text-danger">*</span></label>
+                              <input
+                                type="file"
+                                name="dokumen_ktp_kk"
+                                class="form-control"
+                              />
+                              {% if bh.dokumen_ktp_kk %}
+                              <small class="text-muted">Dokumen lama: <a href="{{ bh.dokumen_ktp_kk.url }}" target="_blank">Lihat</a></small>
+                              {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Upload SKTM <span class="text-danger">*</span></label>
+                              <input type="file" name="dokumen_sktm" class="form-control" />
+                              {% if bh.dokumen_sktm %}
+                              <small class="text-muted">Dokumen lama: <a href="{{ bh.dokumen_sktm.url }}" target="_blank">Lihat</a></small>
+                              {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Upload Dokumen Lainnya (opsional)</label>
+                              <input type="file" name="dokumen_lainnya" class="form-control" />
+                              {% if bh.dokumen_lainnya %}
+                              <small class="text-muted">Dokumen lama: <a href="{{ bh.dokumen_lainnya.url }}" target="_blank">Lihat</a></small>
+                              {% endif %}
+                            </div>
+                          </div>
+
+                          <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-success">
+                              <i class="bi bi-save"></i> Simpan Perubahan
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                  <!-- Hapus -->
+                  <a
+                    href="{% url 'delete_bantuan_hukum' bh.id %}"
+                    onclick="return confirm('Hapus data ini?')"
+                    class="btn btn-danger btn-sm text-white bi bi-trash3-fill"
+                  ></a>
+                  {% else %}
+                  <!-- Admin -->
+                  <a
+                    href="{% url 'setuju_bantuan_hukum' bh.id %}"
+                    class="btn btn-success btn-sm text-white bi bi-check2-all"
+                  ></a>
+                  <button
+                    type="button"
+                    class="btn btn-danger bi bi-ban btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#tolakModal"
+                    data-id="{{ bh.id }}"
+                  ></button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Modal Tolak ==================== -->
+<div class="modal fade" id="tolakModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post" id="formTolakBH">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tolak Pengajuan Bantuan Hukum</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label">Pesan Penolakan</label>
+          <textarea
+            name="pesan_penolakan"
+            class="form-control"
+            required
+          ></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Tolak</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  var tolakModal = document.getElementById("tolakModal");
+  tolakModal.addEventListener("show.bs.modal", function (event) {
+    var button = event.relatedTarget;
+    var bhId = button.getAttribute("data-id");
+    var form = document.getElementById("formTolakBH");
+    form.action = "/dashboard/bantuan-hukum/tolak/" + bhId + "/";
+  });
+</script>
+{% endblock konten %}

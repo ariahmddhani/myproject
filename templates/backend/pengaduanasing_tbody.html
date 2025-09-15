@@ -1,0 +1,52 @@
+{% for aduan in aduans %}
+<tr>
+  <td>
+    <a href="{% url 'detail_pengaduan_asing' aduan.id %}"> {{ aduan.name }} </a>
+  </td>
+  <td>{{ aduan.email }}</td>
+  <td>{{ aduan.phone }}</td>
+  <td>
+    {% if aduan.ktp %}
+    <a
+      href="{{ aduan.ktp }}"
+      onclick="openPopup(this.href); return false;"
+      class="#"
+    >
+      Lihat KTP
+    </a>
+    {% else %} Tidak ada {% endif %}
+  </td>
+  <td>{{ aduan.tanggal }}</td>
+  <td class="text-center">
+    <div class="btn-group gap-2" role="group">
+      {% if aduan.jumlah_jawaban == 0 %}
+      <a href="{% url 'detail_pengaduan_asing' aduan.id %}">
+        <button
+          class="btn btn-primary btn-sm rounded-3 bi bi-chat-dots-fill"
+        ></button>
+      </a>
+      {% else %}
+      <a
+        href="{% url 'arsip_pengaduan_asing' aduan.id %}"
+        class="text-decoration-none"
+      >
+        <button
+          class="btn btn-warning btn-sm rounded-3 bi bi-archive-fill text-light"
+        ></button>
+      </a>
+      <a
+        href="{% url 'delete_pengaduan_asing' aduan.id %}"
+        class="text-decoration-none"
+      >
+        <button class="btn btn-danger btn-sm rounded-3 bi bi-ban"></button>
+      </a>
+      {% endif %}
+    </div>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="5" class="text-center">Tidak ada data pengaduan.</td>
+</tr>
+
+{% endfor %}

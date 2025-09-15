@@ -1,0 +1,36 @@
+{% extends "frontend/base_post.html" %} {% load static %} {% block konten %}
+
+<main class="container my-5" id="pengumuman">
+  <div class="row">
+    <!-- Blog Content -->
+    <div class="col-md-10 col-lg-8 mx-auto">
+      <div class="card shadow-lg border-0">
+        <!-- Gambar Blog -->
+        <img
+          src="{{ berita.gambar }}"
+          class="card-img-top img-fluid"
+          alt="{{ post.judul }}"
+        />
+        <div class="card-body">
+          <!-- Judul Blog -->
+          <h1 class="card-title fw-bold text-center">{{ berita.judul }}</h1>
+          <!-- Tanggal Publikasi -->
+          <p class="text-muted text-center">
+            Published on {{ berita.tanggal|date:"F j, Y" }}
+          </p>
+          <hr />
+          <!-- Konten Blog -->
+          <div class="content">{{ berita.isi|safe }}</div>
+          <!-- Tombol Kembali -->
+          <div class="text-center mt-4">
+            <a href="{% url 'welcome' %}" class="btn btn-secondary"
+              >Back to Home</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock konten %}

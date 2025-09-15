@@ -1,0 +1,31 @@
+{% extends "backend/base_ui.html" %} {% block konten %}
+<div class="pagetitle">
+  <h1>Detail Arsip Pengaduan Asing</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'arsip_pengaduan_asing' %}">Arsip</a>
+      </li>
+      <li class="breadcrumb-item active">Detail</li>
+    </ol>
+  </nav>
+</div>
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Detail Arsip</h5>
+          <p><strong>Nama:</strong> {{ aduans.name }}</p>
+          <p><strong>Email:</strong> {{ aduans.email }}</p>
+          <p><strong>Telepon:</strong> {{ aduans.phone }}</p>
+          <p><strong>Pesan:</strong> {{ aduans.message }}</p>
+          <p><strong>Tanggal Arsip:</strong> {{ aduans.tanggal_arsip }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

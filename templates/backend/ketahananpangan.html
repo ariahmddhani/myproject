@@ -1,0 +1,240 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div class="card">
+  <div class="card-body">
+    <div>
+      <div class="pagetitle mt-4">
+        <h1>Ketahanan Pangan</h1>
+        <nav></nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'dashboard' %}">Home</a>
+          </li>
+          <li class="breadcrumb-item active">Ketahanan Pangan</li>
+        </ol>
+      </div>
+
+      {% if value %}
+      <!-- EDIT FORM -->
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Edit Berita Ketahanan Pangan</h5>
+          <form
+            class="g-5"
+            method="post"
+            action="{% url 'edit_berita_ketahanan_pangan' value.id %}"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="col-12">
+              <label for="inputJudul" class="form-label">Judul</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputJudul"
+                value="{{ value.judul }}"
+                name="inputJudul"
+              />
+            </div>
+            <div class="col-12">
+              <label for="inputKonten" class="form-label">Konten</label>
+              <textarea name="inputKonten">{{ value.|safe }}</textarea>
+            </div>
+            <div class="row mb-3">
+              <label for="inputNumber" class="form-label">Upload gambar</label>
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  type="file"
+                  id="formFile"
+                  name="inputGambar"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-10 gap-3">
+                <a
+                  href="{% url 'berita_ketahanan_pangan' %}"
+                  class="btn btn-secondary"
+                >
+                  Cancel
+                </a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <!-- LIST DATA -->
+      <div class="container-fluid">
+        <div class="d-flex justify-content-end mb-3">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#formModal"
+          >
+            Tambahkan Data
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th>Judul</th>
+                <th>Isi</th>
+                <th>Tanggal</th>
+                <th>Gambar</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in berita %}
+              <tr>
+                <td>
+                  <div
+                    style="
+                      display: -webkit-box;
+                      -webkit-box-orient: vertical;
+                      -webkit-line-clamp: 1;
+                      overflow: hidden;
+                      max-width: 200px;
+                    "
+                  >
+                    <p>{{ item.judul }}</p>
+                  </div>
+                </td>
+                <td>
+                  <div
+                    style="
+                      display: -webkit-box;
+                      -webkit-box-orient: vertical;
+                      -webkit-line-clamp: 1;
+                      overflow: hidden;
+                      max-width: 200px;
+                    "
+                  >
+                    <p>{{ item.isi|striptags }}</p>
+                  </div>
+                </td>
+                <td>
+                  <p>{{ item.tanggal }}</p>
+                </td>
+                <td>
+                  {% if item.gambar %}
+                  <a
+                    href="{{ item.gambar }}"
+                    onclick="window.open(this.href, 'popup', 'width=800,height=600,scrollbars=yes,resizable=yes'); return false;"
+                  >
+                    <img
+                      src="{{ item.gambar }}"
+                      alt="Gambar Berita"
+                      style="
+                        max-width: 100px;
+                        max-height: 100px;
+                        object-fit: cover;
+                      "
+                    />
+                  </a>
+                  {% else %}
+                  <span class="text-muted">Tidak ada gambar</span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  <div class="btn-group gap-3" role="group">
+                    <a
+                      href="{% url 'edit_berita_ketahanan_pangan' item.id %}"
+                      class="btn btn-warning btn-sm rounded-3"
+                    >
+                      Edit
+                    </a>
+                    <a
+                      href="{% url 'delete_berita_ketahanan_pangan' item.id %}"
+                      class="btn btn-danger btn-sm rounded-3"
+                    >
+                      Delete
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- MODAL TAMBAH -->
+      <div
+        class="modal fade"
+        id="formModal"
+        tabindex="-1"
+        aria-labelledby="formModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formModalLabel">
+                Tambah Berita Ketahanan Pangan
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="card">
+                <div class="card-body">
+                  <form class="g-5" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-12">
+                      <label for="inputJudul" class="form-label">Judul</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="inputJudul"
+                        name="inputJudul"
+                      />
+                    </div>
+                    <div class="col-12">
+                      <label for="inputKonten" class="form-label">Konten</label>
+                      <textarea name="inputKonten"></textarea>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="inputNumber" class="form-label"
+                        >Upload gambar</label
+                      >
+                      <div class="col-sm-10">
+                        <input
+                          class="form-control"
+                          type="file"
+                          id="formFile"
+                          name="inputGambar"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL -->
+    </div>
+  </div>
+</div>
+{% endblock konten %}

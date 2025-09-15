@@ -1,0 +1,208 @@
+{% extends "backend/base_ui.html" %} {% load static %} {% load custom_filters %}
+{% block konten %}
+
+<div class="pagetitle">
+  <h1>BESUKAN ONLINE</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active">Pendaftaran Besukan Online</li>
+    </ol>
+  </nav>
+</div>
+<!-- End Page Title -->
+
+<section class="section profile">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body pt-3">
+          <div class="tab-content pt-2">
+            <div
+              class="tab-pane fade show active profile-overview"
+              id="profile-overview"
+            >
+              <h5 class="card-title">Detail Data Besukan WBP</h5>
+
+              <!-- Data Pengunjung -->
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Nama</div>
+                <div class="col-lg-10 col-md-9">{{ suket.nama }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">No. KTP</div>
+                <div class="col-lg-10 col-md-9">{{ suket.ktp }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Tempat Tanggal Lahir</div>
+                <div class="col-lg-10 col-md-9">{{ suket.ttl }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Alamat</div>
+                <div class="col-lg-10 col-md-9">{{ suket.alamat }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Nama WBP</div>
+                <div class="col-lg-10 col-md-9">{{ suket.namawbp }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Hubungan</div>
+                <div class="col-lg-10 col-md-9">{{ suket.hubungan }}</div>
+              </div>
+
+              <!-- Data Kunjungan -->
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Tanggal Kunjungan</div>
+                <div class="col-lg-10 col-md-9">
+                  {{ suket.tanggal_kunjungan }}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Jam Kunjungan</div>
+                <div class="col-lg-10 col-md-9">{{ suket.jam_kunjungan }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-3 label">Jenis Kunjungan</div>
+                <div class="col-lg-10 col-md-9">
+                  {{ suket.jenis_kunjungan }}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label class="col-lg-2 col-md-3 label">Jumlah Pengikut</label>
+                <div class="col-sm-10">
+                  <div class="border p-3 rounded bg-light">
+                    <div class="row mb-1">
+                      <div class="col-4">Laki-laki</div>
+                      <div class="col-8">: {{ jumlah_laki }}</div>
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-4">Perempuan</div>
+                      <div class="col-8">: {{ jumlah_perempuan }}</div>
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-4">Anak-anak</div>
+                      <div class="col-8">: {{ jumlah_anak }}</div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-4 fw-bold">Total</div>
+                      <div class="col-8 fw-bold">
+                        : {{ total_pengikut }} Orang
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-lg-2 col-md-3 label">Daftar Pengikut</div>
+                <div class="col-lg-10 col-md-9">
+                  <div class="border p-3 rounded bg-light">
+                    <div class="table-responsive">
+                      <table class="table table-bordered align-middle">
+                        <thead class="text-center table-secondary">
+                          <tr>
+                            <th style="width: 50px">No</th>
+                            <th>Nama Pengikut</th>
+                            <th style="width: 180px">NIK</th>
+                            <th style="width: 150px">Kategori</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for p in suket.pengikut.all %}
+                          <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td>{{ p.nama }}</td>
+                            <td class="text-center">{{ p.nik }}</td>
+                            <td class="text-capitalize text-center">
+                              {{ p.kategori }}
+                            </td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                            <td colspan="4" class="text-center text-muted">
+                              Tidak ada pengikut
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {% if suket.pengikut.all %}
+                    <hr />
+                    <div class="row">
+                      <div class="col-4 fw-bold">Total Pengikut</div>
+                      <div class="col-8 fw-bold">
+                        : {{ suket.total_pengikut }} Orang
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-lg-2 col-md-3 label">Barang Bawaan</div>
+                <div class="col-lg-10 col-md-9">
+                  <div class="border p-3 rounded bg-light">
+                    <div class="table-responsive">
+                      <table class="table table-bordered align-middle">
+                        <thead class="text-center table-secondary">
+                          <tr>
+                            <th style="width: 50px">No</th>
+                            <th>Nama Barang</th>
+                            <th style="width: 120px">Jumlah</th>
+                            <th style="width: 120px">Satuan</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for item in suket.get_barang_bawaan %}
+                          <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td>{{ item.nama }}</td>
+                            <td class="text-center">{{ item.jumlah }}</td>
+                            <td class="text-center text-capitalize">
+                              {{ item.satuan }}
+                            </td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                            <td colspan="4" class="text-center text-muted">
+                              Tidak ada barang bawaan
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    {% if suket.get_barang_bawaan %}
+                    <hr />
+                    <div class="row">
+                      <div class="col-4 fw-bold">Total Barang</div>
+                      <div class="col-8 fw-bold">
+                        : {{ suket.get_barang_bawaan|length }} Jenis
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- End #main -->
+{% endblock konten %}
